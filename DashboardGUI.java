@@ -3,21 +3,28 @@ import java.awt.*;
 
 public class DashboardGUI extends JFrame {
 
+    private PlacementSystem system;
+
     public DashboardGUI() {
 
+        system = PlacementSystem.getInstance();
+
         setTitle("Placement Management System - Dashboard");
-        setSize(800, 550);
+        setSize(850, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+
         mainPanel.setBorder(
-                BorderFactory.createEmptyBorder(20, 20, 20, 20)
+                BorderFactory.createEmptyBorder(
+                        20, 20, 20, 20
+                )
         );
 
-        // =========================================
+        // =====================================================
         // TITLE
-        // =========================================
+        // =====================================================
 
         JLabel titleLabel = new JLabel(
                 "PLACEMENT MANAGEMENT SYSTEM",
@@ -28,16 +35,21 @@ public class DashboardGUI extends JFrame {
                 new Font("Arial", Font.BOLD, 28)
         );
 
-        mainPanel.add(titleLabel, BorderLayout.NORTH);
-
-
-        // =========================================
-        // DASHBOARD BUTTONS
-        // =========================================
-
-        JPanel buttonPanel = new JPanel(
-                new GridLayout(3, 3, 15, 15)
+        mainPanel.add(
+                titleLabel,
+                BorderLayout.NORTH
         );
+
+
+        // =====================================================
+        // BUTTONS
+        // =====================================================
+
+        JPanel buttonPanel =
+                new JPanel(
+                        new GridLayout(3, 3, 15, 15)
+                );
+
 
         JButton studentButton =
                 new JButton("Student Management");
@@ -80,18 +92,25 @@ public class DashboardGUI extends JFrame {
         buttonPanel.add(summaryButton);
 
 
-        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+        mainPanel.add(
+                buttonPanel,
+                BorderLayout.CENTER
+        );
 
 
-        // =========================================
-        // LOGOUT BUTTON
-        // =========================================
+        // =====================================================
+        // LOGOUT
+        // =====================================================
 
         JButton logoutButton =
                 new JButton("Logout");
 
         JPanel bottomPanel =
-                new JPanel(new FlowLayout(FlowLayout.RIGHT));
+                new JPanel(
+                        new FlowLayout(
+                                FlowLayout.RIGHT
+                        )
+                );
 
         bottomPanel.add(logoutButton);
 
@@ -101,101 +120,90 @@ public class DashboardGUI extends JFrame {
         );
 
 
-        // =========================================
+        // =====================================================
         // BUTTON ACTIONS
-        // =========================================
+        // =====================================================
 
         studentButton.addActionListener(e -> {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Student Management module will open here."
-            );
+            new StudentGUI(system).setVisible(true);
+
         });
 
 
         companyButton.addActionListener(e -> {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Company Management module will open here."
-            );
+            new CompanyGUI(system).setVisible(true);
+
         });
 
 
         jobButton.addActionListener(e -> {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Job Management module will open here."
-            );
+            new JobGUI(system).setVisible(true);
+
         });
 
 
         applicationButton.addActionListener(e -> {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Application Management module will open here."
-            );
+            new ApplicationGUI(system).setVisible(true);
+
         });
 
 
         interviewButton.addActionListener(e -> {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Interview Management module will open here."
-            );
+            new InterviewGUI(system).setVisible(true);
+
         });
 
 
         searchButton.addActionListener(e -> {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Search module will open here."
-            );
+            new SearchGUI(system).setVisible(true);
+
         });
 
 
         sortingButton.addActionListener(e -> {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Student sorting module will open here."
-            );
+            new SortingGUI(system).setVisible(true);
+
         });
 
 
         actionsButton.addActionListener(e -> {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Recent actions will be displayed here."
-            );
+            new ActionsGUI(system).setVisible(true);
+
         });
 
 
         summaryButton.addActionListener(e -> {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "System summary will be displayed here."
-            );
+            new SummaryGUI(system).setVisible(true);
+
         });
 
 
+        // =====================================================
+        // LOGOUT ACTION
+        // =====================================================
+
         logoutButton.addActionListener(e -> {
 
-            int choice = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to logout?",
-                    "Logout",
-                    JOptionPane.YES_NO_OPTION
-            );
+            int choice =
+                    JOptionPane.showConfirmDialog(
+                            this,
+                            "Are you sure you want to logout?",
+                            "Logout",
+                            JOptionPane.YES_NO_OPTION
+                    );
 
-            if (choice == JOptionPane.YES_OPTION) {
+
+            if (choice ==
+                    JOptionPane.YES_OPTION) {
 
                 new LoginGUI().setVisible(true);
 
