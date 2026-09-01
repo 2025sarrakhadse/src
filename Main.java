@@ -70,20 +70,19 @@ public class Main {
                     System.out.println(
                             "\nThank you for using Placement Management System!"
                     );
+                    scanner.close();
                     return;
 
                 default:
-                    System.out.println(
-                            "Invalid choice. Please try again."
-                    );
+                    System.out.println("Invalid choice. Please try again.");
             }
         }
     }
 
 
-    // =========================================
-    // STUDENT MENU
-    // =========================================
+    // =====================================================
+    // STUDENT MANAGEMENT
+    // =====================================================
 
     private static void studentMenu() {
 
@@ -202,9 +201,9 @@ public class Main {
     }
 
 
-    // =========================================
-    // COMPANY MENU
-    // =========================================
+    // =====================================================
+    // COMPANY MANAGEMENT
+    // =====================================================
 
     private static void companyMenu() {
 
@@ -273,15 +272,13 @@ public class Main {
 
         system.addCompany(company);
 
-        System.out.println(
-                "Company added successfully."
-        );
+        System.out.println("Company added successfully.");
     }
 
 
-    // =========================================
-    // JOB MENU
-    // =========================================
+    // =====================================================
+    // JOB MANAGEMENT
+    // =====================================================
 
     private static void jobMenu() {
 
@@ -328,10 +325,7 @@ public class Main {
 
         if (company == null) {
 
-            System.out.println(
-                    "Company not found."
-            );
-
+            System.out.println("Company not found.");
             return;
         }
 
@@ -375,17 +369,15 @@ public class Main {
     }
 
 
-    // =========================================
-    // APPLICATION MENU
-    // =========================================
+    // =====================================================
+    // APPLICATION MANAGEMENT
+    // =====================================================
 
     private static void applicationMenu() {
 
         while (true) {
 
-            System.out.println(
-                    "\n===== APPLICATION MANAGEMENT ====="
-            );
+            System.out.println("\n===== APPLICATION MANAGEMENT =====");
 
             System.out.println("1. Apply for Job");
             System.out.println("2. View Applications");
@@ -433,10 +425,7 @@ public class Main {
         System.out.print("Job ID: ");
         int jobId = readInt();
 
-        system.applyForJob(
-                studentId,
-                jobId
-        );
+        system.applyForJob(studentId, jobId);
     }
 
 
@@ -446,15 +435,12 @@ public class Main {
 
         int id = readInt();
 
-        Application application =
-                system.findApplication(id);
+        Application application = system.findApplication(id);
 
         if (application != null) {
             application.displayApplicationDetails();
         } else {
-            System.out.println(
-                    "Application not found."
-            );
+            System.out.println("Application not found.");
         }
     }
 
@@ -471,29 +457,24 @@ public class Main {
 
         if (system.updateApplicationStatus(id, status)) {
 
-            System.out.println(
-                    "Application status updated."
-            );
+            System.out.println("Application status updated.");
+
         } else {
 
-            System.out.println(
-                    "Application not found."
-            );
+            System.out.println("Application not found.");
         }
     }
 
 
-    // =========================================
-    // INTERVIEW MENU
-    // =========================================
+    // =====================================================
+    // INTERVIEW MANAGEMENT
+    // =====================================================
 
     private static void interviewMenu() {
 
         while (true) {
 
-            System.out.println(
-                    "\n===== INTERVIEW MANAGEMENT ====="
-            );
+            System.out.println("\n===== INTERVIEW MANAGEMENT =====");
 
             System.out.println("1. View Interview Queue");
             System.out.println("2. View Next Interview");
@@ -513,12 +494,14 @@ public class Main {
                     break;
 
                 case 2:
+
                     Application next =
                             system.getNextInterview();
 
                     if (next != null) {
                         next.displayApplicationDetails();
                     }
+
                     break;
 
                 case 3:
@@ -575,6 +558,12 @@ public class Main {
             System.out.println(
                     "Interview scheduled successfully."
             );
+
+        } else {
+
+            System.out.println(
+                    "Unable to schedule interview."
+            );
         }
     }
 
@@ -590,6 +579,7 @@ public class Main {
             System.out.println(
                     "Interview cancelled successfully."
             );
+
         } else {
 
             System.out.println(
@@ -599,9 +589,9 @@ public class Main {
     }
 
 
-    // =========================================
-    // SEARCH MENU
-    // =========================================
+    // =====================================================
+    // SEARCH
+    // =====================================================
 
     private static void searchMenu() {
 
@@ -656,31 +646,27 @@ public class Main {
 
         } else {
 
-            System.out.println(
-                    "Job not found."
-            );
+            System.out.println("Job not found.");
         }
     }
 
 
-    // =========================================
+    // =====================================================
     // SORTING
-    // =========================================
+    // =====================================================
 
     private static void sortStudents() {
 
         Student[] students =
                 system.getStudentsSortedByCGPA();
 
-        StudentSorting.displaySortedStudents(
-                students
-        );
+        StudentSorting.displaySortedStudents(students);
     }
 
 
-    // =========================================
+    // =====================================================
     // INPUT METHODS
-    // =========================================
+    // =====================================================
 
     private static int readInt() {
 
@@ -688,12 +674,9 @@ public class Main {
 
             try {
 
-                int value =
-                        Integer.parseInt(
-                                scanner.nextLine()
-                        );
-
-                return value;
+                return Integer.parseInt(
+                        scanner.nextLine()
+                );
 
             } catch (NumberFormatException e) {
 
@@ -711,12 +694,9 @@ public class Main {
 
             try {
 
-                double value =
-                        Double.parseDouble(
-                                scanner.nextLine()
-                        );
-
-                return value;
+                return Double.parseDouble(
+                        scanner.nextLine()
+                );
 
             } catch (NumberFormatException e) {
 
