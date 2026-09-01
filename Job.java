@@ -28,12 +28,12 @@ public class Job {
         this.company = company;
     }
 
-    // Getter for jobId
+    // Getter for job ID
     public int getJobId() {
         return jobId;
     }
 
-    // Getter for jobTitle
+    // Getter for job title
     public String getJobTitle() {
         return jobTitle;
     }
@@ -43,12 +43,12 @@ public class Job {
         return salary;
     }
 
-    // Getter for minimumCGPA
+    // Getter for minimum CGPA
     public double getMinimumCGPA() {
         return minimumCGPA;
     }
 
-    // Getter for requiredSkill
+    // Getter for required skill
     public String getRequiredSkill() {
         return requiredSkill;
     }
@@ -58,12 +58,12 @@ public class Job {
         return location;
     }
 
-    // Getter for jobType
+    // Getter for job type
     public String getJobType() {
         return jobType;
     }
 
-    // Getter for applicationDeadline
+    // Getter for application deadline
     public String getApplicationDeadline() {
         return applicationDeadline;
     }
@@ -79,10 +79,24 @@ public class Job {
     }
 
     public void setSalary(double salary) {
+
+        if (salary < 0) {
+            throw new IllegalArgumentException(
+                    "Salary cannot be negative."
+            );
+        }
+
         this.salary = salary;
     }
 
     public void setMinimumCGPA(double minimumCGPA) {
+
+        if (minimumCGPA < 0 || minimumCGPA > 10) {
+            throw new IllegalArgumentException(
+                    "Minimum CGPA must be between 0 and 10."
+            );
+        }
+
         this.minimumCGPA = minimumCGPA;
     }
 
@@ -109,7 +123,10 @@ public class Job {
             return false;
         }
 
-        return student.isEligible(minimumCGPA, requiredSkill);
+        return student.isEligible(
+                minimumCGPA,
+                requiredSkill
+        );
     }
 
     // Display job details
@@ -119,14 +136,22 @@ public class Job {
 
         System.out.println("Job ID: " + jobId);
         System.out.println("Job Title: " + jobTitle);
-        System.out.println("Company: " +
-                (company != null ? company.getCompanyName() : "Not specified"));
+
+        System.out.println(
+                "Company: " +
+                (company != null
+                        ? company.getCompanyName()
+                        : "Not specified")
+        );
+
         System.out.println("Salary: " + salary + " LPA");
         System.out.println("Minimum CGPA: " + minimumCGPA);
         System.out.println("Required Skill: " + requiredSkill);
         System.out.println("Location: " + location);
         System.out.println("Job Type: " + jobType);
-        System.out.println("Application Deadline: " + applicationDeadline);
+        System.out.println(
+                "Application Deadline: " + applicationDeadline
+        );
 
         System.out.println("----------------------------");
     }
