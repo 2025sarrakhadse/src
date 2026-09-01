@@ -21,13 +21,21 @@ public class StudentHashMap {
 
         // Prevent duplicate Student IDs
         if (students.containsKey(id)) {
-            System.out.println("Error: Student ID already exists!");
+
+            System.out.println(
+                    "Error: Student ID already exists!"
+            );
+
             return false;
         }
 
+        // Store student using ID as the key
         students.put(id, student);
 
-        System.out.println("Student added successfully.");
+        System.out.println(
+                "Student added successfully."
+        );
+
         return true;
     }
 
@@ -37,60 +45,77 @@ public class StudentHashMap {
         Student student = students.get(studentId);
 
         if (student == null) {
-            System.out.println("Student not found.");
+
+            System.out.println(
+                    "Student not found."
+            );
+
             return null;
         }
 
         return student;
     }
 
-    // Check whether a student exists
-    public boolean containsStudent(int studentId) {
-
-        return students.containsKey(studentId);
-    }
-
-    // Delete student
+    // Delete student by ID
     public boolean deleteStudent(int studentId) {
 
-        if (students.containsKey(studentId)) {
+        if (!students.containsKey(studentId)) {
 
-            students.remove(studentId);
+            System.out.println(
+                    "Student not found."
+            );
 
-            System.out.println("Student deleted successfully.");
-            return true;
-
-        } else {
-
-            System.out.println("Student not found.");
             return false;
         }
+
+        students.remove(studentId);
+
+        System.out.println(
+                "Student deleted successfully."
+        );
+
+        return true;
     }
 
-    // Display all students
+    // Display all registered students
     public void displayAllStudents() {
 
-        System.out.println("\n===== Registered Students =====");
-
         if (students.isEmpty()) {
-            System.out.println("No students registered.");
+
+            System.out.println(
+                    "No students registered."
+            );
+
             return;
         }
 
+        System.out.println(
+                "\n===== Registered Students ====="
+        );
+
         for (Student student : students.values()) {
+
             student.displayStudentDetails();
         }
     }
 
-    // Get all students as an array
+    // Return all students as an array
+    // Used by StudentSorting
     public Student[] getAllStudents() {
 
-        return students.values().toArray(new Student[0]);
+        return students.values()
+                       .toArray(new Student[0]);
     }
 
-    // Get number of students
+    // Return total number of students
     public int getTotalStudents() {
 
         return students.size();
+    }
+
+    // Check whether a student ID exists
+    public boolean containsStudent(int studentId) {
+
+        return students.containsKey(studentId);
     }
 }
