@@ -142,3 +142,50 @@ Student CGPA = 8.5
 Required CGPA = 9.0
 
 Result: Student is not eligible.
+
+5. Application Management
+
+Students can apply for eligible jobs.
+
+Each application contains:
+
+Application ID
+Student
+Job
+Application date
+Application status
+Interview information
+
+A new application initially receives the status:
+
+Applied
+6. Application Status
+
+The application status can be updated according to the placement process.
+
+Examples include:
+
+Applied
+Shortlisted
+Interview Scheduled
+Rejected
+Selected
+7. Interview Management
+
+The system provides interview management functionality.
+
+It supports:
+
+Adding applications to interview queue
+Viewing the next interview
+Processing interviews
+Scheduling interviews
+Cancelling interviews
+Displaying interview information
+
+Interview information includes:
+
+Interview date
+Interview time
+Interview mode
+Interviewer
