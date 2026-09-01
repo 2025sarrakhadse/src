@@ -256,14 +256,3 @@ The project is divided into multiple Java classes.
 | `Main.java` | Console-based application entry point |
 
 ---
-
-## 6. How to Run the Project
-
-### Prerequisites
-
-Make sure Java is installed on your system.
-
-Check Java version using:
-
-```bash
-java --version
