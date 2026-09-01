@@ -10,7 +10,7 @@ public class Company {
     private String hrEmail;
     private String contactNumber;
 
-    // ArrayList to store jobs offered by the company
+    // ArrayList stores jobs offered by the company
     private ArrayList<Job> jobs;
 
     // Constructor
@@ -24,15 +24,15 @@ public class Company {
         this.hrEmail = hrEmail;
         this.contactNumber = contactNumber;
 
-        this.jobs = new ArrayList<>();
+        jobs = new ArrayList<>();
     }
 
-    // Getter for companyId
+    // Getter for company ID
     public int getCompanyId() {
         return companyId;
     }
 
-    // Getter for companyName
+    // Getter for company name
     public String getCompanyName() {
         return companyName;
     }
@@ -62,38 +62,51 @@ public class Company {
         return jobs;
     }
 
-    // Setter for company name
+    // Setters
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
 
-    // Setter for location
     public void setLocation(String location) {
         this.location = location;
     }
 
-    // Setter for HR name
     public void setHrName(String hrName) {
         this.hrName = hrName;
     }
 
-    // Setter for HR email
     public void setHrEmail(String hrEmail) {
         this.hrEmail = hrEmail;
     }
 
-    // Setter for contact number
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
 
     // Add a job to the company
-    public void addJob(Job job) {
+    public boolean addJob(Job job) {
 
-        if (job != null) {
-            jobs.add(job);
-            System.out.println("Job added successfully to " + companyName);
+        if (job == null) {
+            return false;
         }
+
+        // Prevent duplicate Job IDs
+        if (findJob(job.getJobId()) != null) {
+
+            System.out.println(
+                    "Error: Job ID already exists in this company."
+            );
+
+            return false;
+        }
+
+        jobs.add(job);
+
+        System.out.println(
+                "Job added successfully to " + companyName
+        );
+
+        return true;
     }
 
     // Remove a job from the company
@@ -102,6 +115,7 @@ public class Company {
         for (int i = 0; i < jobs.size(); i++) {
 
             if (jobs.get(i).getJobId() == jobId) {
+
                 jobs.remove(i);
                 return true;
             }
@@ -110,7 +124,7 @@ public class Company {
         return false;
     }
 
-    // Find a job using job ID
+    // Find a job using Job ID
     public Job findJob(int jobId) {
 
         for (Job job : jobs) {
@@ -134,6 +148,7 @@ public class Company {
         System.out.println("HR Name: " + hrName);
         System.out.println("HR Email: " + hrEmail);
         System.out.println("Contact Number: " + contactNumber);
+
         System.out.println("Number of Jobs: " + jobs.size());
 
         if (jobs.isEmpty()) {
