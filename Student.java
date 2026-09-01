@@ -7,7 +7,7 @@ public class Student extends User {
     private String phoneNumber;
 
     // Constructor
-    public Student(String userId, String name, String email, String password,
+    public Student(int userId, String name, String email, String password,
                    String department, double cgpa, String[] skills,
                    String phoneNumber) {
 
@@ -97,7 +97,6 @@ public class Student extends User {
             }
 
         } else {
-
             System.out.print("No skills added");
         }
 
