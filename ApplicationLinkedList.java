@@ -15,28 +15,49 @@ public class ApplicationLinkedList {
     // First node of the linked list
     private Node head;
 
+    // Number of applications in the list
+    private int size;
+
     // Constructor
     public ApplicationLinkedList() {
         head = null;
+        size = 0;
     }
 
     // Add application at the end
-    public void addApplication(Application application) {
+    public boolean addApplication(Application application) {
+
+        if (application == null) {
+            return false;
+        }
+
+        // Prevent duplicate application IDs
+        if (searchApplication(application.getApplicationId()) != null) {
+            System.out.println("Error: Application ID already exists.");
+            return false;
+        }
 
         Node newNode = new Node(application);
 
+        // If list is empty
         if (head == null) {
             head = newNode;
-            return;
+            size++;
+            return true;
         }
 
+        // Traverse to the last node
         Node current = head;
 
         while (current.next != null) {
             current = current.next;
         }
 
+        // Add new node at the end
         current.next = newNode;
+        size++;
+
+        return true;
     }
 
     // Display all applications
@@ -66,7 +87,9 @@ public class ApplicationLinkedList {
 
         while (current != null) {
 
-            if (current.application.getApplicationId() == applicationId) {
+            if (current.application.getApplicationId()
+                    == applicationId) {
+
                 return current.application;
             }
 
@@ -84,8 +107,12 @@ public class ApplicationLinkedList {
         }
 
         // If first node contains the application
-        if (head.application.getApplicationId() == applicationId) {
+        if (head.application.getApplicationId()
+                == applicationId) {
+
             head = head.next;
+            size--;
+
             return true;
         }
 
@@ -93,9 +120,12 @@ public class ApplicationLinkedList {
 
         while (current.next != null) {
 
-            if (current.next.application.getApplicationId() == applicationId) {
+            if (current.next.application.getApplicationId()
+                    == applicationId) {
 
                 current.next = current.next.next;
+                size--;
+
                 return true;
             }
 
@@ -105,17 +135,60 @@ public class ApplicationLinkedList {
         return false;
     }
 
-    // Count total applications
-    public int getTotalApplications() {
+    // Get first application
+    public Application getHead() {
 
-        int count = 0;
+        if (head == null) {
+            return null;
+        }
+
+        return head.application;
+    }
+
+    // Get next application after a given application
+    public Application getNext(Application application) {
+
         Node current = head;
 
         while (current != null) {
-            count++;
+
+            if (current.application == application) {
+
+                if (current.next != null) {
+                    return current.next.application;
+                }
+
+                return null;
+            }
+
             current = current.next;
         }
 
-        return count;
+        return null;
+    }
+
+    // Get total number of applications
+    public int getTotalApplications() {
+
+        return size;
+    }
+
+    // Alias used by PlacementSystem
+    public int getSize() {
+
+        return size;
+    }
+
+    // Check whether the list is empty
+    public boolean isEmpty() {
+
+        return head == null;
+    }
+
+    // Clear all applications
+    public void clear() {
+
+        head = null;
+        size = 0;
     }
 }
