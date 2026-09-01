@@ -1,6 +1,6 @@
 public class ActionStack {
 
-    // Node represents one action in the stack
+    // Node of the stack
     private class Node {
 
         String action;
@@ -12,86 +12,86 @@ public class ActionStack {
         }
     }
 
-    // Top of the stack
+    // Top of stack
     private Node top;
-
-    // Number of actions
-    private int size;
 
     // Constructor
     public ActionStack() {
+
         top = null;
-        size = 0;
     }
 
-    // Push an action onto the stack
-    public boolean push(String action) {
+    // Add action to stack
+    public void push(String action) {
 
-        // Do not add empty actions
         if (action == null || action.trim().isEmpty()) {
-            return false;
+            return;
         }
 
         Node newNode = new Node(action);
 
-        // New node points to current top
         newNode.next = top;
 
-        // New node becomes top
         top = newNode;
-
-        size++;
-
-        return true;
     }
 
-    // Remove and return the top action
+    // Remove latest action
     public String pop() {
 
         if (top == null) {
-            System.out.println("Action stack is empty.");
+
+            System.out.println(
+                    "Action stack is empty."
+            );
+
             return null;
         }
 
-        // Store top action
         String action = top.action;
 
-        // Move top to the next node
         top = top.next;
-
-        size--;
 
         return action;
     }
 
-    // View the top action without removing it
+    // View latest action
     public String peek() {
 
         if (top == null) {
-            System.out.println("Action stack is empty.");
+
+            System.out.println(
+                    "Action stack is empty."
+            );
+
             return null;
         }
 
         return top.action;
     }
 
-    // Check whether stack is empty
+    // Check whether empty
     public boolean isEmpty() {
 
         return top == null;
     }
 
-    // Display all actions
+    // Display actions
     public void displayActions() {
 
         if (top == null) {
-            System.out.println("No actions available.");
+
+            System.out.println(
+                    "No actions available."
+            );
+
             return;
         }
 
-        Node current = top;
+        System.out.println(
+                "\n===== Recent Actions ====="
+        );
 
-        System.out.println("\n===== Recent Actions =====");
+        Node current = top;
 
         while (current != null) {
 
@@ -101,16 +101,18 @@ public class ActionStack {
         }
     }
 
-    // Get number of actions
+    // Count actions
     public int size() {
 
-        return size;
-    }
+        int count = 0;
+        Node current = top;
 
-    // Remove all actions
-    public void clear() {
+        while (current != null) {
 
-        top = null;
-        size = 0;
+            count++;
+            current = current.next;
+        }
+
+        return count;
     }
 }
