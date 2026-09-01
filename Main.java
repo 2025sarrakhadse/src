@@ -2,45 +2,104 @@ import java.util.Scanner;
 
 public class Main {
 
-    static Scanner scanner = new Scanner(System.in);
-
-    // Data Structures
-    static StudentHashMap studentMap = new StudentHashMap();
-
-    static ApplicationLinkedList applicationList =
-            new ApplicationLinkedList();
-
-    static InterviewQueue interviewQueue =
-            new InterviewQueue();
-
-    static ActionStack actionStack =
-            new ActionStack();
-
-    // Company and Jobs
-    static Company company;
-    static Job job1;
-    static Job job2;
-
-    // ID Counters
-    static int nextStudentId = 101;
-    static int nextApplicationId = 1001;
-
+    private static Scanner scanner = new Scanner(System.in);
+    private static PlacementSystem system = new PlacementSystem();
 
     public static void main(String[] args) {
 
-        initializeCompanyAndJobs();
+        while (true) {
 
-        boolean running = true;
+            System.out.println("\n====================================");
+            System.out.println("     PLACEMENT MANAGEMENT SYSTEM");
+            System.out.println("====================================");
 
-        System.out.println("========================================");
-        System.out.println("       PLACEMENT MANAGEMENT SYSTEM");
-        System.out.println("========================================");
+            System.out.println("1. Student Management");
+            System.out.println("2. Company Management");
+            System.out.println("3. Job Management");
+            System.out.println("4. Application Management");
+            System.out.println("5. Interview Management");
+            System.out.println("6. Search");
+            System.out.println("7. Sort Students by CGPA");
+            System.out.println("8. Recent Actions");
+            System.out.println("9. System Summary");
+            System.out.println("0. Exit");
 
-        while (running) {
+            System.out.print("\nEnter your choice: ");
 
-            displayMenu();
+            int choice = readInt();
 
-            int choice = readInt("Enter your choice: ");
+            switch (choice) {
+
+                case 1:
+                    studentMenu();
+                    break;
+
+                case 2:
+                    companyMenu();
+                    break;
+
+                case 3:
+                    jobMenu();
+                    break;
+
+                case 4:
+                    applicationMenu();
+                    break;
+
+                case 5:
+                    interviewMenu();
+                    break;
+
+                case 6:
+                    searchMenu();
+                    break;
+
+                case 7:
+                    sortStudents();
+                    break;
+
+                case 8:
+                    system.displayRecentActions();
+                    break;
+
+                case 9:
+                    system.displaySystemSummary();
+                    break;
+
+                case 0:
+                    System.out.println(
+                            "\nThank you for using Placement Management System!"
+                    );
+                    return;
+
+                default:
+                    System.out.println(
+                            "Invalid choice. Please try again."
+                    );
+            }
+        }
+    }
+
+
+    // =========================================
+    // STUDENT MENU
+    // =========================================
+
+    private static void studentMenu() {
+
+        while (true) {
+
+            System.out.println("\n===== STUDENT MANAGEMENT =====");
+
+            System.out.println("1. Register Student");
+            System.out.println("2. View All Students");
+            System.out.println("3. Search Student");
+            System.out.println("4. Delete Student");
+            System.out.println("0. Back");
+
+            System.out.print("Enter choice: ");
+
+            int choice = readInt();
 
             switch (choice) {
 
@@ -49,363 +108,372 @@ public class Main {
                     break;
 
                 case 2:
-                    searchStudent();
+                    system.displayAllStudents();
                     break;
 
                 case 3:
-                    displayStudents();
+                    searchStudent();
                     break;
 
                 case 4:
-                    applyForJob();
+                    deleteStudent();
                     break;
 
-                case 5:
-                    displayApplications();
-                    break;
-
-                case 6:
-                    searchApplication();
-                    break;
-
-                case 7:
-                    scheduleInterview();
-                    break;
-
-                case 8:
-                    viewNextInterview();
-                    break;
-
-                case 9:
-                    processInterview();
-                    break;
-
-                case 10:
-                    viewRecentActions();
-                    break;
-
-                case 11:
-                    undoLastAction();
-                    break;
-
-                case 12:
-                    displaySystemSummary();
-                    break;
-
-                case 13:
-                    sortStudentsByCGPA();
-                    break;
-
-                case 14:
-                    saveStudentsToFile();
-                    break;
-
-                case 15:
-                    viewSavedStudents();
-                    break;
-
-                case 16:
-                    running = false;
-
-                    System.out.println(
-                            "\nThank you for using the Placement Management System!"
-                    );
-
-                    break;
+                case 0:
+                    return;
 
                 default:
-                    System.out.println(
-                            "\nInvalid choice. Please enter a number between 1 and 16."
-                    );
+                    System.out.println("Invalid choice.");
             }
         }
-
-        scanner.close();
     }
 
 
-    // ========================================
-    // INITIALIZE COMPANY AND JOBS
-    // ========================================
-
-    static void initializeCompanyAndJobs() {
-
-        company = new Company(
-                201,
-                "Tech Solutions",
-                "techsolutions@gmail.com"
-        );
-
-        job1 = new Job(
-                301,
-                "Java Developer",
-                8.5,
-                7.5,
-                "Java"
-        );
-
-        job2 = new Job(
-                302,
-                "Data Analyst",
-                7.0,
-                7.0,
-                "Python"
-        );
-
-        company.addJob(job1);
-        company.addJob(job2);
-    }
-
-
-    // ========================================
-    // DISPLAY MENU
-    // ========================================
-
-    static void displayMenu() {
-
-        System.out.println("\n========================================");
-        System.out.println("       PLACEMENT MANAGEMENT SYSTEM");
-        System.out.println("========================================");
-
-        System.out.println("1. Register Student");
-        System.out.println("2. Search Student");
-        System.out.println("3. Display All Students");
-        System.out.println("4. Apply for Job");
-        System.out.println("5. Display Applications");
-        System.out.println("6. Search Application");
-        System.out.println("7. Schedule Interview");
-        System.out.println("8. View Next Interview");
-        System.out.println("9. Process Interview");
-        System.out.println("10. View Recent Actions");
-        System.out.println("11. Undo Last Action");
-        System.out.println("12. System Summary");
-        System.out.println("13. Sort Students by CGPA");
-        System.out.println("14. Save Students to File");
-        System.out.println("15. View Saved Students");
-        System.out.println("16. Exit");
-
-        System.out.println("========================================");
-    }
-
-
-    // ========================================
-    // 1. REGISTER STUDENT
-    // ========================================
-
-    static void registerStudent() {
+    private static void registerStudent() {
 
         System.out.println("\n===== REGISTER STUDENT =====");
 
-        String name =
-                readString("Enter student name: ");
+        System.out.print("Student ID: ");
+        int id = readInt();
 
-        String email =
-                readString("Enter email: ");
+        System.out.print("Name: ");
+        String name = scanner.nextLine();
 
-        String department =
-                readString("Enter department: ");
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
 
-        double cgpa =
-                readDouble("Enter CGPA: ");
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
 
-        String skillsInput =
-                readString(
-                        "Enter skills separated by spaces: "
-                );
+        System.out.print("Department: ");
+        String department = scanner.nextLine();
 
-        String[] skills =
-                skillsInput.trim().split("\\s+");
+        System.out.print("CGPA: ");
+        double cgpa = readDouble();
+
+        System.out.print("Phone Number: ");
+        String phone = scanner.nextLine();
+
+        System.out.print("Skills (comma separated): ");
+        String skillInput = scanner.nextLine();
+
+        String[] skills = skillInput.split(",");
+
+        for (int i = 0; i < skills.length; i++) {
+            skills[i] = skills[i].trim();
+        }
 
         Student student = new Student(
-                nextStudentId,
+                id,
                 name,
                 email,
+                password,
                 department,
                 cgpa,
-                skills
+                skills,
+                phone
         );
 
-        studentMap.addStudent(student);
-
-        actionStack.push(
-                "Student registered: " + name
-        );
-
-        System.out.println(
-                "Student registered successfully!"
-        );
-
-        System.out.println(
-                "Student ID: " + nextStudentId
-        );
-
-        nextStudentId++;
+        system.registerStudent(student);
     }
 
 
-    // ========================================
-    // 2. SEARCH STUDENT
-    // ========================================
+    private static void searchStudent() {
 
-    static void searchStudent() {
+        System.out.print("Enter Student ID: ");
 
-        System.out.println(
-                "\n===== SEARCH STUDENT ====="
-        );
+        int id = readInt();
 
-        int id =
-                readInt("Enter Student ID: ");
-
-        Student student =
-                studentMap.searchStudent(id);
+        Student student = system.findStudent(id);
 
         if (student != null) {
-
             student.displayStudentDetails();
-
-        } else {
-
-            System.out.println(
-                    "Student not found."
-            );
         }
     }
 
 
-    // ========================================
-    // 3. DISPLAY STUDENTS
-    // ========================================
+    private static void deleteStudent() {
 
-    static void displayStudents() {
+        System.out.print("Enter Student ID: ");
 
-        System.out.println(
-                "\n===== ALL STUDENTS ====="
-        );
+        int id = readInt();
 
-        studentMap.displayAllStudents();
+        system.deleteStudent(id);
     }
 
 
-    // ========================================
-    // 4. APPLY FOR JOB
-    // ========================================
+    // =========================================
+    // COMPANY MENU
+    // =========================================
 
-    static void applyForJob() {
+    private static void companyMenu() {
 
-        System.out.println(
-                "\n===== APPLY FOR JOB ====="
+        while (true) {
+
+            System.out.println("\n===== COMPANY MANAGEMENT =====");
+
+            System.out.println("1. Add Company");
+            System.out.println("2. View Companies");
+            System.out.println("0. Back");
+
+            System.out.print("Enter choice: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+
+                case 1:
+                    addCompany();
+                    break;
+
+                case 2:
+                    system.displayCompanies();
+                    break;
+
+                case 0:
+                    return;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+
+    private static void addCompany() {
+
+        System.out.println("\n===== ADD COMPANY =====");
+
+        System.out.print("Company ID: ");
+        int id = readInt();
+
+        System.out.print("Company Name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Location: ");
+        String location = scanner.nextLine();
+
+        System.out.print("HR Name: ");
+        String hrName = scanner.nextLine();
+
+        System.out.print("HR Email: ");
+        String hrEmail = scanner.nextLine();
+
+        System.out.print("Contact Number: ");
+        String contact = scanner.nextLine();
+
+        Company company = new Company(
+                id,
+                name,
+                location,
+                hrName,
+                hrEmail,
+                contact
         );
 
-        int studentId =
-                readInt("Enter Student ID: ");
+        system.addCompany(company);
 
-        Student student =
-                studentMap.searchStudent(studentId);
+        System.out.println(
+                "Company added successfully."
+        );
+    }
 
-        if (student == null) {
+
+    // =========================================
+    // JOB MENU
+    // =========================================
+
+    private static void jobMenu() {
+
+        while (true) {
+
+            System.out.println("\n===== JOB MANAGEMENT =====");
+
+            System.out.println("1. Add Job");
+            System.out.println("2. View All Jobs");
+            System.out.println("0. Back");
+
+            System.out.print("Enter choice: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+
+                case 1:
+                    addJob();
+                    break;
+
+                case 2:
+                    system.displayAllJobs();
+                    break;
+
+                case 0:
+                    return;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+
+    private static void addJob() {
+
+        System.out.println("\n===== ADD JOB =====");
+
+        System.out.print("Company ID: ");
+        int companyId = readInt();
+
+        Company company = system.findCompany(companyId);
+
+        if (company == null) {
 
             System.out.println(
-                    "Student not found."
+                    "Company not found."
             );
 
             return;
         }
 
-        System.out.println("\nAvailable Jobs:");
+        System.out.print("Job ID: ");
+        int jobId = readInt();
 
-        System.out.println(
-                "301. Java Developer"
+        System.out.print("Job Title: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Salary (LPA): ");
+        double salary = readDouble();
+
+        System.out.print("Minimum CGPA: ");
+        double cgpa = readDouble();
+
+        System.out.print("Required Skill: ");
+        String skill = scanner.nextLine();
+
+        System.out.print("Location: ");
+        String location = scanner.nextLine();
+
+        System.out.print("Job Type: ");
+        String jobType = scanner.nextLine();
+
+        System.out.print("Application Deadline: ");
+        String deadline = scanner.nextLine();
+
+        Job job = new Job(
+                jobId,
+                title,
+                salary,
+                cgpa,
+                skill,
+                location,
+                jobType,
+                deadline,
+                company
         );
 
-        System.out.println(
-                "302. Data Analyst"
-        );
+        system.addJob(companyId, job);
+    }
 
-        int jobId =
-                readInt("Enter Job ID: ");
 
-        Job selectedJob;
+    // =========================================
+    // APPLICATION MENU
+    // =========================================
 
-        if (jobId == 301) {
+    private static void applicationMenu() {
 
-            selectedJob = job1;
-
-        } else if (jobId == 302) {
-
-            selectedJob = job2;
-
-        } else {
+        while (true) {
 
             System.out.println(
-                    "Invalid Job ID."
+                    "\n===== APPLICATION MANAGEMENT ====="
             );
 
-            return;
+            System.out.println("1. Apply for Job");
+            System.out.println("2. View Applications");
+            System.out.println("3. Search Application");
+            System.out.println("4. Update Application Status");
+            System.out.println("0. Back");
+
+            System.out.print("Enter choice: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+
+                case 1:
+                    applyForJob();
+                    break;
+
+                case 2:
+                    system.displayApplications();
+                    break;
+
+                case 3:
+                    searchApplication();
+                    break;
+
+                case 4:
+                    updateApplicationStatus();
+                    break;
+
+                case 0:
+                    return;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
         }
-
-        Application application =
-                new Application(
-                        nextApplicationId,
-                        student,
-                        selectedJob
-                );
-
-        applicationList.addApplication(
-                application
-        );
-
-        actionStack.push(
-        student.getName()
-                + " applied for a job"
-        );
-       
-        System.out.println(
-                "Application submitted successfully!"
-        );
-
-        System.out.println(
-                "Application ID: "
-                        + nextApplicationId
-        );
-
-        nextApplicationId++;
     }
 
 
-    // ========================================
-    // 5. DISPLAY APPLICATIONS
-    // ========================================
+    private static void applyForJob() {
 
-    static void displayApplications() {
+        System.out.print("Student ID: ");
+        int studentId = readInt();
 
-        System.out.println(
-                "\n===== ALL APPLICATIONS ====="
+        System.out.print("Job ID: ");
+        int jobId = readInt();
+
+        system.applyForJob(
+                studentId,
+                jobId
         );
-
-        applicationList.displayApplications();
     }
 
 
-    // ========================================
-    // 6. SEARCH APPLICATION
-    // ========================================
+    private static void searchApplication() {
 
-    static void searchApplication() {
+        System.out.print("Application ID: ");
 
-        System.out.println(
-                "\n===== SEARCH APPLICATION ====="
-        );
-
-        int id =
-                readInt("Enter Application ID: ");
+        int id = readInt();
 
         Application application =
-                applicationList.searchApplication(id);
+                system.findApplication(id);
 
         if (application != null) {
-
             application.displayApplicationDetails();
+        } else {
+            System.out.println(
+                    "Application not found."
+            );
+        }
+    }
 
+
+    private static void updateApplicationStatus() {
+
+        System.out.print("Application ID: ");
+
+        int id = readInt();
+
+        System.out.print("New Status: ");
+
+        String status = scanner.nextLine();
+
+        if (system.updateApplicationStatus(id, status)) {
+
+            System.out.println(
+                    "Application status updated."
+            );
         } else {
 
             System.out.println(
@@ -415,207 +483,194 @@ public class Main {
     }
 
 
-    // ========================================
-    // 7. SCHEDULE INTERVIEW
-    // ========================================
+    // =========================================
+    // INTERVIEW MENU
+    // =========================================
 
-    static void scheduleInterview() {
+    private static void interviewMenu() {
 
-        System.out.println(
-                "\n===== SCHEDULE INTERVIEW ====="
-        );
+        while (true) {
 
-        int applicationId =
-                readInt(
-                        "Enter Application ID: "
+            System.out.println(
+                    "\n===== INTERVIEW MANAGEMENT ====="
+            );
+
+            System.out.println("1. View Interview Queue");
+            System.out.println("2. View Next Interview");
+            System.out.println("3. Process Next Interview");
+            System.out.println("4. Schedule Interview");
+            System.out.println("5. Cancel Interview");
+            System.out.println("0. Back");
+
+            System.out.print("Enter choice: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+
+                case 1:
+                    system.displayInterviewQueue();
+                    break;
+
+                case 2:
+                    Application next =
+                            system.getNextInterview();
+
+                    if (next != null) {
+                        next.displayApplicationDetails();
+                    }
+                    break;
+
+                case 3:
+                    system.processNextInterview();
+                    break;
+
+                case 4:
+                    scheduleInterview();
+                    break;
+
+                case 5:
+                    cancelInterview();
+                    break;
+
+                case 0:
+                    return;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+
+    private static void scheduleInterview() {
+
+        System.out.print("Application ID: ");
+
+        int id = readInt();
+
+        System.out.print("Interview Date: ");
+        String date = scanner.nextLine();
+
+        System.out.print("Interview Time: ");
+        String time = scanner.nextLine();
+
+        System.out.print("Interview Mode: ");
+        String mode = scanner.nextLine();
+
+        System.out.print("Interviewer Name: ");
+        String interviewer = scanner.nextLine();
+
+        boolean success =
+                system.scheduleInterview(
+                        id,
+                        date,
+                        time,
+                        mode,
+                        interviewer
                 );
 
-        Application application =
-                applicationList.searchApplication(
-                        applicationId
-                );
+        if (success) {
 
-        if (application == null) {
+            System.out.println(
+                    "Interview scheduled successfully."
+            );
+        }
+    }
+
+
+    private static void cancelInterview() {
+
+        System.out.print("Application ID: ");
+
+        int id = readInt();
+
+        if (system.cancelInterview(id)) {
+
+            System.out.println(
+                    "Interview cancelled successfully."
+            );
+        } else {
 
             System.out.println(
                     "Application not found."
             );
-
-            return;
         }
-
-        interviewQueue.enqueue(application);
-
-        actionStack.push(
-                "Interview scheduled for Application "
-                        + applicationId
-        );
-
-        System.out.println(
-                "Interview scheduled successfully!"
-        );
     }
 
 
-    // ========================================
-    // 8. VIEW NEXT INTERVIEW
-    // ========================================
+    // =========================================
+    // SEARCH MENU
+    // =========================================
 
-    static void viewNextInterview() {
+    private static void searchMenu() {
 
-        System.out.println(
-                "\n===== NEXT INTERVIEW ====="
-        );
+        while (true) {
 
-        Application application =
-                interviewQueue.peek();
+            System.out.println("\n===== SEARCH =====");
 
-        if (application != null) {
+            System.out.println("1. Search Student");
+            System.out.println("2. Search Application");
+            System.out.println("3. Search Job");
+            System.out.println("0. Back");
 
-            application.displayApplicationDetails();
+            System.out.print("Enter choice: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+
+                case 1:
+                    searchStudent();
+                    break;
+
+                case 2:
+                    searchApplication();
+                    break;
+
+                case 3:
+                    searchJob();
+                    break;
+
+                case 0:
+                    return;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+
+    private static void searchJob() {
+
+        System.out.print("Enter Job ID: ");
+
+        int id = readInt();
+
+        Job job = system.findJob(id);
+
+        if (job != null) {
+
+            job.displayJobDetails();
 
         } else {
 
             System.out.println(
-                    "No interviews in the queue."
+                    "Job not found."
             );
         }
     }
 
 
-    // ========================================
-    // 9. PROCESS INTERVIEW
-    // ========================================
+    // =========================================
+    // SORTING
+    // =========================================
 
-    static void processInterview() {
-
-        System.out.println(
-                "\n===== PROCESS INTERVIEW ====="
-        );
-
-        Application application =
-                interviewQueue.dequeue();
-
-        if (application != null) {
-
-            System.out.println(
-                    "Processing interview:"
-            );
-
-            application.displayApplicationDetails();
-
-            actionStack.push(
-                    "Interview processed"
-            );
-
-        } else {
-
-            System.out.println(
-                    "No interviews available."
-            );
-        }
-    }
-
-
-    // ========================================
-    // 10. VIEW RECENT ACTIONS
-    // ========================================
-
-    static void viewRecentActions() {
-
-        System.out.println(
-                "\n===== RECENT ACTIONS ====="
-        );
-
-        actionStack.displayActions();
-    }
-
-
-    // ========================================
-    // 11. UNDO LAST ACTION
-    // ========================================
-
-    static void undoLastAction() {
-
-        System.out.println(
-                "\n===== UNDO LAST ACTION ====="
-        );
-
-        String action =
-                actionStack.pop();
-
-        if (action != null) {
-
-            System.out.println(
-                    "Last action removed:"
-            );
-
-            System.out.println(action);
-
-        } else {
-
-            System.out.println(
-                    "No actions available to undo."
-            );
-        }
-    }
-
-
-    // ========================================
-    // 12. SYSTEM SUMMARY
-    // ========================================
-
-    static void displaySystemSummary() {
-
-        System.out.println(
-                "\n===== SYSTEM SUMMARY ====="
-        );
-
-        System.out.println(
-                "Total Students: "
-                        + studentMap.getTotalStudents()
-        );
-
-        System.out.println(
-                "Total Applications: "
-                        + applicationList.getTotalApplications()
-        );
-
-        System.out.println(
-                "Interviews in Queue: "
-                        + interviewQueue.size()
-        );
-
-        System.out.println(
-                "Recorded Actions: "
-                        + actionStack.size()
-        );
-    }
-
-
-    // ========================================
-    // 13. SORT STUDENTS BY CGPA
-    // ========================================
-
-    static void sortStudentsByCGPA() {
-
-        System.out.println(
-                "\n===== SORT STUDENTS BY CGPA ====="
-        );
-
-        if (studentMap.getTotalStudents() == 0) {
-
-            System.out.println(
-                    "No students available for sorting."
-            );
-
-            return;
-        }
+    private static void sortStudents() {
 
         Student[] students =
-                studentMap.getAllStudents();
-
-        StudentSorting.sortByCGPA(students);
+                system.getStudentsSortedByCGPA();
 
         StudentSorting.displaySortedStudents(
                 students
@@ -623,111 +678,50 @@ public class Main {
     }
 
 
-    // ========================================
-    // 14. SAVE STUDENTS TO FILE
-    // ========================================
-
-    static void saveStudentsToFile() {
-
-        System.out.println(
-                "\n===== SAVE STUDENTS ====="
-        );
-
-        if (studentMap.getTotalStudents() == 0) {
-
-            System.out.println(
-                    "No students available to save."
-            );
-
-            return;
-        }
-
-        Student[] students =
-                studentMap.getAllStudents();
-
-        FileManager.saveStudents(students);
-    }
-
-
-    // ========================================
-    // 15. VIEW SAVED STUDENTS
-    // ========================================
-
-    static void viewSavedStudents() {
-
-        System.out.println(
-                "\n===== STUDENTS STORED IN FILE ====="
-        );
-
-        FileManager.displaySavedStudents();
-    }
-
-
-    // ========================================
+    // =========================================
     // INPUT METHODS
-    // ========================================
+    // =========================================
 
-    static int readInt(String message) {
+    private static int readInt() {
 
         while (true) {
 
             try {
 
-                System.out.print(message);
+                int value =
+                        Integer.parseInt(
+                                scanner.nextLine()
+                        );
 
-                return Integer.parseInt(
-                        scanner.nextLine()
-                );
+                return value;
 
             } catch (NumberFormatException e) {
 
-                System.out.println(
-                        "Invalid input. Please enter a number."
+                System.out.print(
+                        "Please enter a valid number: "
                 );
             }
         }
     }
 
 
-    static double readDouble(String message) {
+    private static double readDouble() {
 
         while (true) {
 
             try {
 
-                System.out.print(message);
+                double value =
+                        Double.parseDouble(
+                                scanner.nextLine()
+                        );
 
-                return Double.parseDouble(
-                        scanner.nextLine()
-                );
+                return value;
 
             } catch (NumberFormatException e) {
 
-                System.out.println(
-                        "Invalid input. Please enter a valid number."
-                );
-            }
-        }
-    }
-
-
-    static String readString(String message) {
-
-        while (true) {
-
-            System.out.print(message);
-
-            String input =
-                    scanner.nextLine().trim();
-
-            if (!input.isEmpty()) {
-
-                return input;
-
-            } else {
-
-                System.out.println(
-                        "Input cannot be empty."
+                System.out.print(
+                        "Please enter a valid number: "
                 );
             }
         }
