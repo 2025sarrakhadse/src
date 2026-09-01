@@ -2,34 +2,50 @@ import java.util.ArrayList;
 
 public class PlacementSystem {
 
-    // Core data structures
+    // ==============================
+    // DSA DATA STRUCTURES
+    // ==============================
+
+    // Stores students using Student ID
     private StudentHashMap studentMap;
+
+    // Stores all job applications
     private ApplicationLinkedList applicationList;
+
+    // Stores applications waiting for interviews
     private InterviewQueue interviewQueue;
+
+    // Stores recent actions
     private ActionStack actionStack;
 
-    // Other application data
+    // Stores companies
     private ArrayList<Company> companies;
-    private ArrayList<Job> jobs;
 
-    // Authentication service
-    private AuthenticationService authenticationService;
 
-    // Constructor
+    // ==============================
+    // ID GENERATORS
+    // ==============================
+
+    private int nextApplicationId = 1001;
+
+
+    // ==============================
+    // CONSTRUCTOR
+    // ==============================
+
     public PlacementSystem() {
 
         studentMap = new StudentHashMap();
         applicationList = new ApplicationLinkedList();
         interviewQueue = new InterviewQueue();
         actionStack = new ActionStack();
-
         companies = new ArrayList<>();
-        jobs = new ArrayList<>();
-
-        authenticationService = new AuthenticationService();
     }
 
-    // ==================== STUDENT MANAGEMENT ====================
+
+    // ==============================
+    // STUDENT MANAGEMENT
+    // ==============================
 
     // Register a new student
     public boolean registerStudent(Student student) {
@@ -38,61 +54,89 @@ public class PlacementSystem {
             return false;
         }
 
-        if (!ValidationUtil.isValidName(student.getName()) ||
-            !ValidationUtil.isValidEmail(student.getEmail()) ||
-            !ValidationUtil.isValidPassword(student.getPassword()) ||
-            !ValidationUtil.isValidCGPA(student.getCgpa()) ||
-            !ValidationUtil.isValidPhone(student.getPhoneNumber())) {
+        boolean added = studentMap.addStudent(student);
 
-            return false;
+        if (added) {
+
+            actionStack.push(
+                    "Student " + student.getName()
+                    + " registered"
+            );
         }
 
-        if (studentMap.searchStudent(student.getUserId()) != null) {
-            return false;
-        }
-
-        studentMap.addStudent(student);
-        authenticationService.registerUser(student);
-
-        actionStack.push(
-                "Student " + student.getName() + " registered"
-        );
-
-        return true;
+        return added;
     }
 
-    // Search student by ID
-    public Student searchStudent(int studentId) {
+
+    // Search student
+    public Student findStudent(int studentId) {
 
         return studentMap.searchStudent(studentId);
     }
 
-    // ==================== COMPANY MANAGEMENT ====================
 
-    // Add a company
+    // Delete student
+    public boolean deleteStudent(int studentId) {
+
+        Student student = studentMap.searchStudent(studentId);
+
+        if (student == null) {
+            return false;
+        }
+
+        boolean deleted = studentMap.deleteStudent(studentId);
+
+        if (deleted) {
+
+            actionStack.push(
+                    "Student " + student.getName()
+                    + " deleted"
+            );
+        }
+
+        return deleted;
+    }
+
+
+    // Display all students
+    public void displayAllStudents() {
+
+        studentMap.displayAllStudents();
+    }
+
+
+    // Get students sorted by CGPA
+    public Student[] getStudentsSortedByCGPA() {
+
+        Student[] students = studentMap.getAllStudents();
+
+        StudentSorting.sortByCGPA(students);
+
+        return students;
+    }
+
+
+    // ==============================
+    // COMPANY MANAGEMENT
+    // ==============================
+
+    // Add company
     public boolean addCompany(Company company) {
 
         if (company == null) {
             return false;
         }
 
-        for (Company existingCompany : companies) {
-
-            if (existingCompany.getCompanyId()
-                    == company.getCompanyId()) {
-
-                return false;
-            }
-        }
-
         companies.add(company);
 
         actionStack.push(
-                "Company " + company.getCompanyName() + " added"
+                "Company " + company.getCompanyName()
+                + " added"
         );
 
         return true;
     }
+
 
     // Find company by ID
     public Company findCompany(int companyId) {
@@ -107,52 +151,70 @@ public class PlacementSystem {
         return null;
     }
 
-    // Get all companies
+
+    // Display all companies
+    public void displayCompanies() {
+
+        if (companies.isEmpty()) {
+
+            System.out.println(
+                    "No companies registered."
+            );
+
+            return;
+        }
+
+        System.out.println(
+                "\n===== REGISTERED COMPANIES ====="
+        );
+
+        for (Company company : companies) {
+
+            company.displayCompanyDetails();
+        }
+    }
+
+
+    // Get company list
     public ArrayList<Company> getCompanies() {
 
         return companies;
     }
 
-    // ==================== JOB MANAGEMENT ====================
 
-    // Add a job to a company
-    public boolean addJob(Job job, int companyId) {
+    // ==============================
+    // JOB MANAGEMENT
+    // ==============================
 
-        if (job == null) {
-            return false;
-        }
+    // Add job to a company
+    public boolean addJob(int companyId, Job job) {
 
         Company company = findCompany(companyId);
 
-        if (company == null) {
+        if (company == null || job == null) {
             return false;
         }
 
-        for (Job existingJob : jobs) {
-
-            if (existingJob.getJobId() == job.getJobId()) {
-                return false;
-            }
-        }
-
-        jobs.add(job);
         company.addJob(job);
 
         actionStack.push(
                 "Job " + job.getJobTitle()
-                        + " added to "
-                        + company.getCompanyName()
+                + " added to "
+                + company.getCompanyName()
         );
 
         return true;
     }
 
+
     // Find job by ID
     public Job findJob(int jobId) {
 
-        for (Job job : jobs) {
+        for (Company company : companies) {
 
-            if (job.getJobId() == jobId) {
+            Job job = company.findJob(jobId);
+
+            if (job != null) {
                 return job;
             }
         }
@@ -160,110 +222,171 @@ public class PlacementSystem {
         return null;
     }
 
-    // Get all jobs
-    public ArrayList<Job> getJobs() {
 
-        return jobs;
+    // Display all available jobs
+    public void displayAllJobs() {
+
+        boolean found = false;
+
+        System.out.println(
+                "\n===== AVAILABLE JOBS ====="
+        );
+
+        for (Company company : companies) {
+
+            for (Job job : company.getJobs()) {
+
+                job.displayJobDetails();
+
+                found = true;
+            }
+        }
+
+        if (!found) {
+
+            System.out.println(
+                    "No jobs available."
+            );
+        }
     }
 
-    // ==================== APPLICATION MANAGEMENT ====================
+
+    // ==============================
+    // APPLICATION MANAGEMENT
+    // ==============================
 
     // Student applies for a job
-    public boolean applyForJob(int applicationId,
-                               int studentId,
-                               int jobId) {
+    public Application applyForJob(
+            int studentId,
+            int jobId) {
 
-        Student student = studentMap.searchStudent(studentId);
+        Student student =
+                studentMap.searchStudent(studentId);
+
+        if (student == null) {
+
+            System.out.println(
+                    "Student not found."
+            );
+
+            return null;
+        }
+
         Job job = findJob(jobId);
 
-        if (student == null || job == null) {
-            return false;
+        if (job == null) {
+
+            System.out.println(
+                    "Job not found."
+            );
+
+            return null;
         }
+
 
         // Check eligibility
         if (!job.isStudentEligible(student)) {
-            return false;
+
+            System.out.println(
+                    "Student is not eligible for this job."
+            );
+
+            return null;
         }
 
-        // Prevent duplicate applications
-        if (findApplicationByStudentAndJob(studentId, jobId)
-                != null) {
 
-            return false;
-        }
-
+        // Create application
         Application application =
-                new Application(applicationId, student, job);
+                new Application(
+                        nextApplicationId++,
+                        student,
+                        job
+                );
 
+
+        // Add application to linked list
         applicationList.addApplication(application);
+
 
         // Add application to interview queue
         interviewQueue.enqueue(application);
 
+
+        // Record action
         actionStack.push(
                 student.getName()
-                        + " applied for "
-                        + job.getJobTitle()
+                + " applied for "
+                + job.getJobTitle()
         );
 
-        return true;
+
+        System.out.println(
+                "Application submitted successfully."
+        );
+
+        return application;
     }
 
-    // Find an application
-    public Application findApplication(int applicationId) {
 
-        return applicationList.searchApplication(applicationId);
+    // Search application
+    public Application findApplication(
+            int applicationId) {
+
+        return applicationList
+                .searchApplication(applicationId);
     }
 
-    // Find application by student and job
-    public Application findApplicationByStudentAndJob(
-            int studentId, int jobId) {
 
-        Application current =
-                applicationList.getHead();
+    // Display all applications
+    public void displayApplications() {
 
-        while (current != null) {
-
-            if (current.getStudent().getUserId() == studentId &&
-                current.getJob().getJobId() == jobId) {
-
-                return current;
-            }
-
-            current = applicationList.getNext(current);
-        }
-
-        return null;
+        applicationList.displayApplications();
     }
 
-    // Update application status
-    public boolean updateApplicationStatus(
-            int applicationId, String newStatus) {
+
+    // ==============================
+    // INTERVIEW MANAGEMENT
+    // ==============================
+
+    // View next interview
+    public Application getNextInterview() {
+
+        return interviewQueue.peek();
+    }
+
+
+    // Process next interview
+    public Application processNextInterview() {
 
         Application application =
-                findApplication(applicationId);
+                interviewQueue.dequeue();
 
-        if (application == null ||
-            newStatus == null ||
-            newStatus.trim().isEmpty()) {
+        if (application != null) {
 
-            return false;
+            System.out.println(
+                    "\nInterview processed for:"
+            );
+
+            application.displayApplicationDetails();
+
+            actionStack.push(
+                    "Interview processed for "
+                    + application.getStudent().getName()
+            );
         }
 
-        application.setStatus(newStatus);
-
-        actionStack.push(
-                "Application " + applicationId
-                        + " status changed to "
-                        + newStatus
-        );
-
-        return true;
+        return application;
     }
 
-    // ==================== INTERVIEW MANAGEMENT ====================
 
-    // Schedule an interview
+    // Display interview queue
+    public void displayInterviewQueue() {
+
+        interviewQueue.displayQueue();
+    }
+
+
+    // Schedule interview
     public boolean scheduleInterview(
             int applicationId,
             String date,
@@ -275,140 +398,191 @@ public class PlacementSystem {
                 findApplication(applicationId);
 
         if (application == null) {
+
+            System.out.println(
+                    "Application not found."
+            );
+
             return false;
         }
 
-        application.scheduleInterview(
-                date,
-                time,
-                mode,
-                interviewer
-        );
+        boolean scheduled =
+                application.scheduleInterview(
+                        date,
+                        time,
+                        mode,
+                        interviewer
+                );
+
+        if (scheduled) {
+
+            actionStack.push(
+                    "Interview scheduled for "
+                    + application.getStudent().getName()
+            );
+        }
+
+        return scheduled;
+    }
+
+
+    // Cancel interview
+    public boolean cancelInterview(
+            int applicationId) {
+
+        Application application =
+                findApplication(applicationId);
+
+        if (application == null) {
+            return false;
+        }
+
+        application.cancelInterview();
 
         actionStack.push(
-                "Interview scheduled for application "
-                        + applicationId
+                "Interview cancelled for "
+                + application.getStudent().getName()
         );
 
         return true;
     }
 
-    // Get next interview
-    public Application getNextInterview() {
 
-        return interviewQueue.peek();
-    }
+    // ==============================
+    // APPLICATION STATUS
+    // ==============================
 
-    // Process next interview
-    public Application processNextInterview() {
-
-        Application application =
-                interviewQueue.dequeue();
-
-        if (application != null) {
-
-            actionStack.push(
-                    "Interview processed for application "
-                            + application.getApplicationId()
-            );
-        }
-
-        return application;
-    }
-
-    // ==================== AUTHENTICATION ====================
-
-    // Login user
-    public User login(int userId, String password) {
-
-        return authenticationService.login(
-                userId,
-                password
-        );
-    }
-
-    // ==================== DISPLAY METHODS ====================
-
-    // Display all students
-    public void displayStudents() {
-
-        studentMap.getAllStudents();
-    }
-
-    // Display all applications
-    public void displayApplications() {
-
-        applicationList.displayApplications();
-    }
-
-    // Display recent actions
-    public void displayRecentActions() {
-
-        actionStack.displayStack();
-    }
-
-    // Display next interview
-    public void displayNextInterview() {
+    // Update application status
+    public boolean updateApplicationStatus(
+            int applicationId,
+            String status) {
 
         Application application =
-                interviewQueue.peek();
+                findApplication(applicationId);
 
         if (application == null) {
-
-            System.out.println(
-                    "No interviews in the queue."
-            );
-
-            return;
+            return false;
         }
 
-        application.displayApplicationDetails();
-    }
+        application.setStatus(status);
 
-    // ==================== SORTING ====================
-
-    // Sort students by CGPA
-    public void sortStudentsByCGPA() {
-
-        StudentSorting.sortByCGPA(
-                studentMap.getAllStudentsList()
+        actionStack.push(
+                "Application "
+                + applicationId
+                + " status changed to "
+                + status
         );
+
+        return true;
     }
 
-    // ==================== SUMMARY ====================
+
+    // ==============================
+    // ACTION STACK
+    // ==============================
+
+    // View recent actions
+    public void displayRecentActions() {
+
+        actionStack.displayActions();
+    }
+
+
+    // Undo latest action
+    public String undoLastAction() {
+
+        return actionStack.pop();
+    }
+
+
+    // ==============================
+    // SEARCH
+    // ==============================
+
+    // Search student by ID
+    public Student searchStudent(int studentId) {
+
+        return studentMap.searchStudent(studentId);
+    }
+
+
+    // Search application by ID
+    public Application searchApplication(
+            int applicationId) {
+
+        return applicationList
+                .searchApplication(applicationId);
+    }
+
+
+    // ==============================
+    // SYSTEM STATISTICS
+    // ==============================
+
+    public int getTotalStudents() {
+
+        return studentMap.getTotalStudents();
+    }
+
+
+    public int getTotalApplications() {
+
+        return applicationList
+                .getTotalApplications();
+    }
+
+
+    public int getInterviewsRemaining() {
+
+        return interviewQueue.size();
+    }
+
+
+    public int getActionsRemaining() {
+
+        return actionStack.size();
+    }
+
+
+    public int getTotalCompanies() {
+
+        return companies.size();
+    }
+
+
+    // ==============================
+    // SYSTEM SUMMARY
+    // ==============================
 
     public void displaySystemSummary() {
 
-        System.out.println("\n===== SYSTEM SUMMARY =====");
+        System.out.println(
+                "\n===== SYSTEM SUMMARY ====="
+        );
 
         System.out.println(
                 "Total Students: "
-                        + studentMap.getTotalStudents()
+                + getTotalStudents()
         );
 
         System.out.println(
                 "Total Companies: "
-                        + companies.size()
-        );
-
-        System.out.println(
-                "Total Jobs: "
-                        + jobs.size()
+                + getTotalCompanies()
         );
 
         System.out.println(
                 "Total Applications: "
-                        + applicationList.getSize()
+                + getTotalApplications()
         );
 
         System.out.println(
                 "Interviews Remaining: "
-                        + interviewQueue.size()
+                + getInterviewsRemaining()
         );
 
         System.out.println(
                 "Actions Remaining: "
-                        + actionStack.size()
+                + getActionsRemaining()
         );
     }
 }
