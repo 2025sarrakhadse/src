@@ -6,48 +6,128 @@ public class Job {
     private double salary;
     private double minimumCGPA;
     private String requiredSkill;
+    private String location;
+    private String jobType;
+    private String applicationDeadline;
+    private Company company;
 
     // Constructor
     public Job(int jobId, String jobTitle, double salary,
-               double minimumCGPA, String requiredSkill) {
+               double minimumCGPA, String requiredSkill,
+               String location, String jobType,
+               String applicationDeadline, Company company) {
 
         this.jobId = jobId;
         this.jobTitle = jobTitle;
         this.salary = salary;
         this.minimumCGPA = minimumCGPA;
         this.requiredSkill = requiredSkill;
+        this.location = location;
+        this.jobType = jobType;
+        this.applicationDeadline = applicationDeadline;
+        this.company = company;
     }
 
-    // Getters
+    // Getter for jobId
     public int getJobId() {
         return jobId;
     }
 
+    // Getter for jobTitle
     public String getJobTitle() {
         return jobTitle;
     }
 
+    // Getter for salary
     public double getSalary() {
         return salary;
     }
 
+    // Getter for minimumCGPA
     public double getMinimumCGPA() {
         return minimumCGPA;
     }
 
+    // Getter for requiredSkill
     public String getRequiredSkill() {
         return requiredSkill;
+    }
+
+    // Getter for location
+    public String getLocation() {
+        return location;
+    }
+
+    // Getter for jobType
+    public String getJobType() {
+        return jobType;
+    }
+
+    // Getter for applicationDeadline
+    public String getApplicationDeadline() {
+        return applicationDeadline;
+    }
+
+    // Getter for company
+    public Company getCompany() {
+        return company;
+    }
+
+    // Setters
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public void setMinimumCGPA(double minimumCGPA) {
+        this.minimumCGPA = minimumCGPA;
+    }
+
+    public void setRequiredSkill(String requiredSkill) {
+        this.requiredSkill = requiredSkill;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public void setApplicationDeadline(String applicationDeadline) {
+        this.applicationDeadline = applicationDeadline;
+    }
+
+    // Check whether a student is eligible for this job
+    public boolean isStudentEligible(Student student) {
+
+        if (student == null) {
+            return false;
+        }
+
+        return student.isEligible(minimumCGPA, requiredSkill);
     }
 
     // Display job details
     public void displayJobDetails() {
 
-        System.out.println("----------------------------");
+        System.out.println("\n----------------------------");
+
         System.out.println("Job ID: " + jobId);
         System.out.println("Job Title: " + jobTitle);
+        System.out.println("Company: " +
+                (company != null ? company.getCompanyName() : "Not specified"));
         System.out.println("Salary: " + salary + " LPA");
         System.out.println("Minimum CGPA: " + minimumCGPA);
         System.out.println("Required Skill: " + requiredSkill);
+        System.out.println("Location: " + location);
+        System.out.println("Job Type: " + jobType);
+        System.out.println("Application Deadline: " + applicationDeadline);
+
         System.out.println("----------------------------");
     }
 }
