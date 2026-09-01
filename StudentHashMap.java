@@ -2,6 +2,7 @@ import java.util.HashMap;
 
 public class StudentHashMap {
 
+    // HashMap stores Student objects using Student ID as the key
     private HashMap<Integer, Student> students;
 
     // Constructor
@@ -9,20 +10,25 @@ public class StudentHashMap {
         students = new HashMap<>();
     }
 
-    // Add student
-    public void addStudent(Student student) {
+    // Add a student
+    public boolean addStudent(Student student) {
+
+        if (student == null) {
+            return false;
+        }
 
         int id = student.getUserId();
 
         // Prevent duplicate Student IDs
         if (students.containsKey(id)) {
             System.out.println("Error: Student ID already exists!");
-            return;
+            return false;
         }
 
         students.put(id, student);
 
         System.out.println("Student added successfully.");
+        return true;
     }
 
     // Search student by ID
@@ -38,39 +44,53 @@ public class StudentHashMap {
         return student;
     }
 
+    // Check whether a student exists
+    public boolean containsStudent(int studentId) {
+
+        return students.containsKey(studentId);
+    }
+
     // Delete student
-    public void deleteStudent(int studentId) {
+    public boolean deleteStudent(int studentId) {
 
         if (students.containsKey(studentId)) {
 
             students.remove(studentId);
 
             System.out.println("Student deleted successfully.");
+            return true;
 
         } else {
 
             System.out.println("Student not found.");
+            return false;
         }
     }
 
     // Display all students
     public void displayAllStudents() {
 
-    System.out.println("\n===== Registered Students =====");
+        System.out.println("\n===== Registered Students =====");
 
-    for (Student student : students.values()) {
-        student.displayStudentDetails();
+        if (students.isEmpty()) {
+            System.out.println("No students registered.");
+            return;
+        }
+
+        for (Student student : students.values()) {
+            student.displayStudentDetails();
+        }
     }
-}
 
+    // Get all students as an array
+    public Student[] getAllStudents() {
 
-// Get all students for sorting
-public Student[] getAllStudents() {
-    return students.values().toArray(new Student[0]);
-}
+        return students.values().toArray(new Student[0]);
+    }
 
-public int getTotalStudents() {
-    return students.size();
-}
+    // Get number of students
+    public int getTotalStudents() {
 
+        return students.size();
+    }
 }
