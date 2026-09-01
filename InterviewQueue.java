@@ -1,6 +1,6 @@
 public class InterviewQueue {
 
-    // Node represents one element in the queue
+    // Node represents one element of the queue
     private class Node {
 
         Application application;
@@ -12,29 +12,50 @@ public class InterviewQueue {
         }
     }
 
-    // Front and rear of the queue
+    // Front = first application in the queue
     private Node front;
+
+    // Rear = last application in the queue
     private Node rear;
+
+    // Number of applications in the queue
+    private int size;
 
     // Constructor
     public InterviewQueue() {
         front = null;
         rear = null;
+        size = 0;
     }
 
     // Add application to the rear
-    public void enqueue(Application application) {
+    public boolean enqueue(Application application) {
+
+        if (application == null) {
+            return false;
+        }
 
         Node newNode = new Node(application);
 
+        // If queue is empty
         if (rear == null) {
+
             front = newNode;
             rear = newNode;
-            return;
+            size++;
+
+            return true;
         }
 
+        // Connect new node after rear
         rear.next = newNode;
+
+        // Move rear to the new node
         rear = newNode;
+
+        size++;
+
+        return true;
     }
 
     // Remove application from the front
@@ -45,18 +66,23 @@ public class InterviewQueue {
             return null;
         }
 
+        // Store application being removed
         Application application = front.application;
 
+        // Move front to next node
         front = front.next;
 
+        // If queue becomes empty
         if (front == null) {
             rear = null;
         }
 
+        size--;
+
         return application;
     }
 
-    // View the next application
+    // View the next application without removing it
     public Application peek() {
 
         if (front == null) {
@@ -67,7 +93,7 @@ public class InterviewQueue {
         return front.application;
     }
 
-    // Display all applications in the queue
+    // Display all applications in queue
     public void displayQueue() {
 
         if (front == null) {
@@ -89,20 +115,21 @@ public class InterviewQueue {
 
     // Check whether queue is empty
     public boolean isEmpty() {
+
         return front == null;
     }
 
-    // Count applications
+    // Get number of applications
     public int size() {
 
-        int count = 0;
-        Node current = front;
+        return size;
+    }
 
-        while (current != null) {
-            count++;
-            current = current.next;
-        }
+    // Clear the entire queue
+    public void clear() {
 
-        return count;
+        front = null;
+        rear = null;
+        size = 0;
     }
 }
