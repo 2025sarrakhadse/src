@@ -136,10 +136,8 @@ A student must satisfy the required conditions such as:
 - Required skill
 
 For example:
-
-```text
 Student CGPA = 8.5
-Required CGPA = 9.0
+Required CGPA = 9.0 
 
 Result: Student is not eligible.
 
@@ -188,4 +186,4 @@ Interview information includes:
 Interview date
 Interview time
 Interview mode
-Interviewer
+Interviewer 
