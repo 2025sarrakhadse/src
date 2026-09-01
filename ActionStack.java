@@ -15,19 +15,34 @@ public class ActionStack {
     // Top of the stack
     private Node top;
 
+    // Number of actions
+    private int size;
+
     // Constructor
     public ActionStack() {
         top = null;
+        size = 0;
     }
 
     // Push an action onto the stack
-    public void push(String action) {
+    public boolean push(String action) {
+
+        // Do not add empty actions
+        if (action == null || action.trim().isEmpty()) {
+            return false;
+        }
 
         Node newNode = new Node(action);
 
+        // New node points to current top
         newNode.next = top;
 
+        // New node becomes top
         top = newNode;
+
+        size++;
+
+        return true;
     }
 
     // Remove and return the top action
@@ -38,9 +53,13 @@ public class ActionStack {
             return null;
         }
 
+        // Store top action
         String action = top.action;
 
+        // Move top to the next node
         top = top.next;
+
+        size--;
 
         return action;
     }
@@ -56,8 +75,9 @@ public class ActionStack {
         return top.action;
     }
 
-    // Check whether the stack is empty
+    // Check whether stack is empty
     public boolean isEmpty() {
+
         return top == null;
     }
 
@@ -81,17 +101,16 @@ public class ActionStack {
         }
     }
 
-    // Count total actions
+    // Get number of actions
     public int size() {
 
-        int count = 0;
-        Node current = top;
+        return size;
+    }
 
-        while (current != null) {
-            count++;
-            current = current.next;
-        }
+    // Remove all actions
+    public void clear() {
 
-        return count;
+        top = null;
+        size = 0;
     }
 }
