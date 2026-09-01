@@ -1,189 +1,269 @@
 # College Placement Management System
 
-## 📌 Project Overview
+A Java-based College Placement Management System developed using
+Object-Oriented Programming (OOP) concepts and Data Structures.
 
-The **College Placement Management System** is a Java-based application designed to manage the placement activities of a college.
+The system helps manage students, companies, jobs, applications,
+interviews, searching, sorting, and recent system activities.
 
-The system provides different modules for managing:
+---
 
-- Students
-- Companies
-- Jobs
-- Job Applications
-- Interviews
+## 1. Project Overview
+
+The College Placement Management System is designed to automate
+and simplify the college placement process.
+
+The system provides separate modules for:
+
+- Student Management
+- Company Management
+- Job Management
+- Application Management
+- Interview Management
 - Searching
 - Student Sorting
 - Recent Actions
-- System Statistics
+- System Summary
 
-The project is developed using **Java** and demonstrates important **Object-Oriented Programming (OOP)** concepts along with **Data Structures and Algorithms (DSA)**.
-
----
-
-## 🎯 Objectives
-
-The main objectives of this project are:
-
-1. To maintain student placement information.
-2. To manage companies participating in campus placements.
-3. To manage job opportunities offered by companies.
-4. To allow eligible students to apply for jobs.
-5. To manage application statuses.
-6. To schedule and manage interviews.
-7. To demonstrate the practical use of different data structures.
-8. To provide searching and sorting functionality.
-9. To maintain a record of recent system actions.
+The project is implemented in Java and uses different data
+structures according to the requirements of each module.
 
 ---
 
-## 🛠️ Technologies Used
+## 2. Technologies Used
 
-- **Programming Language:** Java
-- **GUI:** Java Swing
-- **Data Structures:** HashMap, ArrayList, Linked List, Queue, Stack
-- **Date Handling:** Java `LocalDate`
-- **Development Environment:** Visual Studio Code / GitHub
-- **Java Version:** Java 25
+- Java
+- Java Swing
+- Object-Oriented Programming
+- Java Collections
+- Custom Data Structures
+- GitHub
+- VS Code
 
----
+### Java Concepts Used
 
-# 📂 Project Structure
-
-The project contains the following major classes:
-
-| File | Purpose |
-|---|---|
-| `Main.java` | Main entry point and console-based menu |
-| `User.java` | Base class for users |
-| `Student.java` | Stores student information |
-| `Company.java` | Stores company information |
-| `Job.java` | Stores job information |
-| `PlacementOfficer.java` | Represents placement officer |
-| `Application.java` | Represents a job application |
-| `PlacementSystem.java` | Central system managing placement operations |
-| `StudentHashMap.java` | Stores students using HashMap |
-| `ApplicationLinkedList.java` | Stores applications using Linked List |
-| `InterviewQueue.java` | Manages interview queue |
-| `ActionStack.java` | Stores recent actions using Stack |
-| `StudentSorting.java` | Sorts students according to CGPA |
-| `ValidationUtil.java` | Provides validation utilities |
-| `AuthenticationService.java` | Handles authentication-related operations |
-| `FileManager.java` | Handles file-related operations |
-| `LoginGUI.java` | Login interface |
-| `DashboardGUI.java` | Main GUI dashboard |
-| `StudentGUI.java` | Student management interface |
-| `CompanyGUI.java` | Company management interface |
-| `JobGUI.java` | Job management interface |
-| `ApplicationGUI.java` | Application management interface |
-| `InterviewGUI.java` | Interview management interface |
-| `SearchGUI.java` | Search interface |
-| `SortingGUI.java` | Student sorting interface |
-| `ActionsGUI.java` | Recent actions interface |
-| `SummaryGUI.java` | System summary interface |
+- Classes and Objects
+- Encapsulation
+- Inheritance
+- Method Overriding
+- Constructors
+- Arrays
+- Exception Handling
+- Access Modifiers
+- Static Methods
+- GUI Programming using Swing
 
 ---
 
-# 🧩 Main Features
+## 3. Data Structures Used
 
-## 1. Student Management
+Different data structures are used to demonstrate their practical
+application in the placement management system.
+
+### HashMap
+
+Students are stored using a custom `StudentHashMap`.
+
+It allows students to be searched using their Student ID.
+
+### ArrayList
+
+Companies and their related information are managed using
+`ArrayList`.
+
+### Linked List
+
+Applications are stored using the custom
+`ApplicationLinkedList`.
+
+### Queue
+
+Interview-related applications are managed using
+`InterviewQueue`.
+
+The queue follows the FIFO (First In First Out) principle.
+
+### Stack
+
+Recent system activities are stored using the custom
+`ActionStack`.
+
+The stack follows the LIFO (Last In First Out) principle.
+
+### Bubble Sort
+
+Students can be sorted according to CGPA using Bubble Sort.
+
+The students are arranged in descending order of CGPA.
+
+---
+
+## 4. Main Features
+
+### Student Management
 
 The system allows the user to:
 
-- Register students
+- Register a student
 - View all students
 - Search students using Student ID
 - Delete students
-- Store student department
-- Store CGPA
-- Store skills
-- Store phone number
+- Store student details such as:
+  - Student ID
+  - Name
+  - Email
+  - Phone Number
+  - Department
+  - CGPA
+  - Skills
 
----
+### Company Management
 
-## 2. Company Management
-
-The system allows placement officers to:
+The system allows the user to:
 
 - Add companies
 - Search companies
 - View registered companies
-- Manage companies participating in placements
+- Manage company information
 
----
+### Job Management
 
-## 3. Job Management
-
-Companies can have multiple job opportunities.
+The system allows companies to have job opportunities.
 
 The system supports:
 
 - Adding jobs
 - Searching jobs
-- Displaying available jobs
-- Associating jobs with companies
-- Defining minimum CGPA requirements
-- Defining required skills
+- Viewing available jobs
+- Setting minimum CGPA requirements
+- Setting required skills
 
----
+### Application Management
 
-## 4. Student Eligibility
+Students can apply for available jobs.
 
-Before a student applies for a job, the system checks eligibility.
+The system:
 
-A student must satisfy the required conditions such as:
+- Checks whether the student exists
+- Checks whether the job exists
+- Checks student eligibility
+- Creates an application
+- Stores the application in a Linked List
 
-- Minimum CGPA
-- Required skill
+### Interview Management
 
-For example:
-Student CGPA = 8.5
-Required CGPA = 9.0 
-
-Result: Student is not eligible.
-
-5. Application Management
-
-Students can apply for eligible jobs.
-
-Each application contains:
-
-Application ID
-Student
-Job
-Application date
-Application status
-Interview information
-
-A new application initially receives the status:
-
-Applied
-6. Application Status
-
-The application status can be updated according to the placement process.
-
-Examples include:
-
-Applied
-Shortlisted
-Interview Scheduled
-Rejected
-Selected
-7. Interview Management
-
-The system provides interview management functionality.
+The system provides an interview queue.
 
 It supports:
 
-Adding applications to interview queue
-Viewing the next interview
-Processing interviews
-Scheduling interviews
-Cancelling interviews
-Displaying interview information
+- Adding applications to the interview queue
+- Viewing the next interview
+- Processing interviews
+- Scheduling interviews
+- Cancelling interviews
 
-Interview information includes:
+### Search
 
-Interview date
-Interview time
-Interview mode
-Interviewer 
+The system supports searching for:
+
+- Students
+- Companies
+- Jobs
+- Applications
+
+### Sorting
+
+Students can be sorted according to CGPA.
+
+The system uses Bubble Sort to arrange students in
+descending order of CGPA.
+
+### Recent Actions
+
+The system records important activities such as:
+
+- Student registration
+- Company addition
+- Job addition
+- Application submission
+- Interview scheduling
+- Interview processing
+- Deletion operations
+
+These activities are maintained using a Stack.
+
+### System Summary
+
+The system provides statistics such as:
+
+- Total Students
+- Total Companies
+- Total Applications
+- Interviews Remaining
+- Recent Actions
+
+---
+
+## 5. Project Structure
+
+The project is divided into multiple Java classes.
+
+### Core Classes
+
+| File | Purpose |
+|------|---------|
+| `User.java` | Base class for users |
+| `Student.java` | Stores student information |
+| `Company.java` | Stores company information |
+| `Job.java` | Stores job information |
+| `Application.java` | Represents a job application |
+| `PlacementOfficer.java` | Represents placement officer functionality |
+| `PlacementSystem.java` | Main system logic |
+
+### Data Structure Classes
+
+| File | Data Structure |
+|------|----------------|
+| `StudentHashMap.java` | HashMap |
+| `ApplicationLinkedList.java` | Linked List |
+| `InterviewQueue.java` | Queue |
+| `ActionStack.java` | Stack |
+| `StudentSorting.java` | Bubble Sort |
+
+### GUI Classes
+
+| File | Purpose |
+|------|---------|
+| `LoginGUI.java` | Login screen |
+| `DashboardGUI.java` | Main dashboard |
+| `StudentGUI.java` | Student management |
+| `CompanyGUI.java` | Company management |
+| `JobGUI.java` | Job management |
+| `ApplicationGUI.java` | Application management |
+| `InterviewGUI.java` | Interview management |
+| `SearchGUI.java` | Search functionality |
+| `SortingGUI.java` | Student sorting |
+| `ActionsGUI.java` | Recent actions |
+| `SummaryGUI.java` | System summary |
+
+### Supporting Classes
+
+| File | Purpose |
+|------|---------|
+| `AuthenticationService.java` | Authentication-related operations |
+| `ValidationUtil.java` | Input validation |
+| `FileManager.java` | File-related operations |
+| `Main.java` | Console-based application entry point |
+
+---
+
+## 6. How to Run the Project
+
+### Prerequisites
+
+Make sure Java is installed on your system.
+
+Check Java version using:
+
+```bash
+java --version
