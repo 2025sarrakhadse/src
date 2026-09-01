@@ -7,7 +7,7 @@ public class Student extends User {
     private String phoneNumber;
 
     // Constructor
-    public Student(int userId, String name, String email, String password,
+    public Student(String userId, String name, String email, String password,
                    String department, double cgpa, String[] skills,
                    String phoneNumber) {
 
@@ -47,6 +47,13 @@ public class Student extends User {
 
     // Setter for CGPA
     public void setCgpa(double cgpa) {
+
+        if (cgpa < 0 || cgpa > 10) {
+            throw new IllegalArgumentException(
+                    "CGPA must be between 0 and 10."
+            );
+        }
+
         this.cgpa = cgpa;
     }
 
@@ -60,7 +67,7 @@ public class Student extends User {
         this.phoneNumber = phoneNumber;
     }
 
-    // Method Overriding
+    // Method overriding
     @Override
     public void displayRole() {
         System.out.println("Role: Student");
@@ -80,10 +87,18 @@ public class Student extends User {
 
         System.out.print("Skills: ");
 
-        if (skills != null) {
+        if (skills != null && skills.length > 0) {
+
             for (String skill : skills) {
-                System.out.print(skill + " ");
+
+                if (skill != null && !skill.trim().isEmpty()) {
+                    System.out.print(skill + " ");
+                }
             }
+
+        } else {
+
+            System.out.print("No skills added");
         }
 
         System.out.println();
@@ -98,7 +113,9 @@ public class Student extends User {
 
         for (String skill : skills) {
 
-            if (skill.equalsIgnoreCase(requiredSkill)) {
+            if (skill != null &&
+                skill.equalsIgnoreCase(requiredSkill.trim())) {
+
                 return true;
             }
         }
@@ -107,8 +124,10 @@ public class Student extends User {
     }
 
     // Check whether student is eligible for a job
-    public boolean isEligible(double minimumCGPA, String requiredSkill) {
+    public boolean isEligible(double minimumCGPA,
+                              String requiredSkill) {
 
-        return cgpa >= minimumCGPA && hasSkill(requiredSkill);
+        return cgpa >= minimumCGPA
+                && hasSkill(requiredSkill);
     }
 }
