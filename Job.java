@@ -43,6 +43,10 @@ public class Job {
         return salary;
     }
 
+    public double getSalaryLPA() {
+        return salary;
+    }
+
     // Getter for minimum CGPA
     public double getMinimumCGPA() {
         return minimumCGPA;
@@ -123,10 +127,33 @@ public class Job {
             return false;
         }
 
-        return student.isEligible(
-                minimumCGPA,
-                requiredSkill
-        );
+        double studentCgpa = student.getCgpa();
+        double reqCgpa = getMinimumCGPA();
+
+        return studentCgpa >= reqCgpa && student.hasSkill(requiredSkill);
+    }
+
+    // Get detailed eligibility reason message for GUI feedback
+    public String getEligibilityReason(Student student) {
+
+        if (student == null) {
+            return "Ineligible: Student record not found.";
+        }
+
+        double studentCgpa = student.getCgpa();
+        double reqCgpa = getMinimumCGPA();
+
+        if (studentCgpa < reqCgpa) {
+            return String.format("Ineligible: Student CGPA (%.2f) < Required CGPA (%.2f)", studentCgpa, reqCgpa);
+        }
+
+        if (!student.hasSkill(requiredSkill)) {
+            String req = (requiredSkill == null || requiredSkill.trim().isEmpty()) ? "None" : requiredSkill.trim();
+            return "Ineligible: Missing required skill '" + req + "'";
+        }
+
+        String req = (requiredSkill == null || requiredSkill.trim().isEmpty()) ? "None" : requiredSkill.trim();
+        return String.format("ELIGIBLE! CGPA (%.2f >= %.2f) & Skill '%s' matched", studentCgpa, reqCgpa, req);
     }
 
     // Display job details

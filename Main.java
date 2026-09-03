@@ -6,11 +6,20 @@ public class Main {
     private static PlacementSystem system = new PlacementSystem();
 
     public static void main(String[] args) {
+        if (args != null && args.length > 0 && args[0].equalsIgnoreCase("--cli")) {
+            runCLIMenu();
+        } else {
+            System.out.println("Launching Placement Management System GUI...");
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                new LoginGUI().setVisible(true);
+            });
+        }
+    }
 
+    private static void runCLIMenu() {
         while (true) {
-
             System.out.println("\n====================================");
-            System.out.println("     PLACEMENT MANAGEMENT SYSTEM");
+            System.out.println("     PLACEMENT MANAGEMENT SYSTEM (CLI)");
             System.out.println("====================================");
 
             System.out.println("1. Student Management");
@@ -27,6 +36,7 @@ public class Main {
             System.out.print("\nEnter your choice: ");
 
             int choice = readInt();
+
 
             switch (choice) {
 

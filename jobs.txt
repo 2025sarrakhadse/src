@@ -1,0 +1,9 @@
+303|Cloud DevOps Engineer|15.0|8.0|AWS|Pune|Full-time|2026-11-01|202
+304|Cybersecurity Analyst|11.5|7.0|C++|Mumbai|Full-time|2026-10-30|203
+308|QA Automation Engineer|8.5|6.5|SQL|Hyderabad|Full-time|2026-10-25|204
+305|Data Analyst|9.5|7.5|Python|Bengaluru|Full-time|2026-10-10|205
+310|Data Science Associate|13.0|8.0|Python|Bengaluru|Full-time|2026-11-20|205
+307|FinTech Backend Developer|16.5|8.5|Java|Mumbai|Full-time|2026-12-01|206
+306|AI Research Intern|8.0|8.5|Machine Learning|Pune|Internship|2026-11-15|207
+309|Associate Systems Engineer|6.5|6.5|Data Structures|Bengaluru|Full-time|2026-12-15|208
+301|Web Developer|12.0|9.5|Java, React|Navi Mumbai|Full Time|11-11-2026|201

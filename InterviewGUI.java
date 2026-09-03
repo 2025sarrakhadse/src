@@ -420,21 +420,13 @@ public class InterviewGUI extends JFrame {
         );
     }
 
-} else {
-
-    outputArea.setText(
-            "Unable to schedule interview.\n"
-            + "Please check all details."
-    );
-
-                }else {
+            } else {
 
                 outputArea.setText(
                         "Unable to schedule interview.\n"
                         + "Please check all details."
                 );
             }
-
 
         } catch (NumberFormatException e) {
 

@@ -1,0 +1,10 @@
+1001|101|301|Interview Scheduled|2026-09-03
+1002|104|307|Selected|2026-09-03
+1003|103|305|Interview Scheduled|2026-09-03
+1004|107|303|Interview Scheduled|2026-09-03
+1006|110|303|Interview Scheduled|2026-09-03
+1007|106|308|Selected|2026-09-03
+1008|113|308|Shortlisted|2026-09-03
+1009|115|301|Interview Scheduled|2026-09-03
+1010|105|304|Rejected|2026-09-03
+1011|101|305|Interview Scheduled|2026-09-03

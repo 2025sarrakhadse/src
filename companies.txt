@@ -1,0 +1,8 @@
+202|CloudScale Inc|Pune|Meera Singhania|meera@cloudscale.com|9812345602
+203|CyberEdge Systems|Mumbai|Vikram Shroff|vikram@cyberedge.com|9812345603
+204|InnovateX|Hyderabad|Sunita Rao|sunita@innovatex.io|9812345604
+205|DataDynamics|Bengaluru|Amitabh Bhatt|amit@datadynamics.ai|9812345605
+206|Apex Financial|Mumbai|Kavita Nambiar|kavita@apexfin.com|9812345606
+207|NextGen AI|Pune|Sameer Roy|sameer@nextgenai.com|9812345607
+208|Infosys Systems|Bengaluru|Nidhi Sharma|nidhi@infosys.com|9812345608
+201|Accenture|Navi Mumbai|Anita Dongre|anita.dongre@example.com|9813462578

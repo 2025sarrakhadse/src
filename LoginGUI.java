@@ -1,120 +1,136 @@
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
+/**
+ * Modern Login View - Enterprise Authentication Screen.
+ * Uses flat UI styling, input validation via ValidationUtil, and smooth transition
+ * to DashboardGUI.
+ */
 public class LoginGUI extends JFrame {
 
     private JTextField emailField;
     private JPasswordField passwordField;
 
     public LoginGUI() {
-
         setTitle("Placement Management System - Login");
-        setSize(450, 300);
+        setSize(480, 520);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
+        // Main Background Panel (Deep Navy)
+        JPanel bgPanel = new JPanel(new GridBagLayout());
+        bgPanel.setBackground(UITheme.COLOR_NAVY);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        // Centered White Login Card
+        JPanel loginCard = UITheme.createCardPanel();
+        loginCard.setPreferredSize(new Dimension(380, 420));
+        loginCard.setLayout(new BorderLayout(0, 20));
 
-        JLabel titleLabel =
-                new JLabel("PLACEMENT MANAGEMENT SYSTEM");
+        // Header Title Panel
+        JPanel titlePanel = new JPanel(new GridLayout(3, 1, 0, 4));
+        titlePanel.setOpaque(false);
 
-        titleLabel.setFont(
-                new Font("Arial", Font.BOLD, 20)
-        );
+        JLabel brandIcon = new JLabel("PLACEMENT OS", SwingConstants.CENTER);
+        brandIcon.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        brandIcon.setForeground(UITheme.COLOR_NAVY);
 
-        JLabel emailLabel =
-                new JLabel("Email:");
+        JLabel titleLabel = new JLabel("Welcome Back", SwingConstants.CENTER);
+        titleLabel.setFont(UITheme.FONT_HEADER);
+        titleLabel.setForeground(UITheme.COLOR_TEXT_DARK);
 
-        JLabel passwordLabel =
-                new JLabel("Password:");
+        JLabel subLabel = new JLabel("Sign in to access Placement Dashboard", SwingConstants.CENTER);
+        subLabel.setFont(UITheme.FONT_SMALL);
+        subLabel.setForeground(UITheme.COLOR_TEXT_MUTED);
 
-        emailField = new JTextField(20);
+        titlePanel.add(brandIcon);
+        titlePanel.add(titleLabel);
+        titlePanel.add(subLabel);
 
-        passwordField =
-                new JPasswordField(20);
+        loginCard.add(titlePanel, BorderLayout.NORTH);
 
-        JButton loginButton =
-                new JButton("Login");
+        // Form Fields Grid
+        JPanel formGrid = new JPanel(new GridLayout(4, 1, 0, 8));
+        formGrid.setOpaque(false);
+        formGrid.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
+        JLabel emailLabel = new JLabel("Email / Username");
+        emailLabel.setFont(UITheme.FONT_BOLD);
+        emailLabel.setForeground(UITheme.COLOR_TEXT_MUTED);
 
-        panel.add(titleLabel, gbc);
+        emailField = UITheme.createStyledTextField();
+        emailField.setText("officer@placement.edu"); // Default convenience text
 
-        gbc.gridwidth = 1;
+        JLabel passLabel = new JLabel("Password");
+        passLabel.setFont(UITheme.FONT_BOLD);
+        passLabel.setForeground(UITheme.COLOR_TEXT_MUTED);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        passwordField = UITheme.createStyledPasswordField();
+        passwordField.setText("admin123"); // Default convenience text
 
-        panel.add(emailLabel, gbc);
+        formGrid.add(emailLabel);
+        formGrid.add(emailField);
+        formGrid.add(passLabel);
+        formGrid.add(passwordField);
 
-        gbc.gridx = 1;
+        loginCard.add(formGrid, BorderLayout.CENTER);
 
-        panel.add(emailField, gbc);
+        // Actions Bottom Panel
+        JPanel btnPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+        btnPanel.setOpaque(false);
+        btnPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
+        JButton loginButton = UITheme.createPrimaryButton("Sign In to Portal");
+        loginButton.setPreferredSize(new Dimension(300, 40));
+        loginButton.addActionListener(e -> performLogin());
 
-        panel.add(passwordLabel, gbc);
+        JLabel footerLabel = new JLabel("Placement Management System v2.0", SwingConstants.CENTER);
+        footerLabel.setFont(UITheme.FONT_SMALL);
+        footerLabel.setForeground(UITheme.COLOR_TEXT_MUTED);
 
-        gbc.gridx = 1;
+        btnPanel.add(loginButton);
+        btnPanel.add(footerLabel);
 
-        panel.add(passwordField, gbc);
+        loginCard.add(btnPanel, BorderLayout.SOUTH);
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 2;
-
-        panel.add(loginButton, gbc);
-
-        loginButton.addActionListener(e -> login());
-
-        add(panel);
+        bgPanel.add(loginCard);
+        add(bgPanel);
     }
 
-
-    private void login() {
-
-        String email =
-                emailField.getText().trim();
-
-        String password =
-                new String(
-                        passwordField.getPassword()
-                );
+    private void performLogin() {
+        String email = emailField.getText().trim();
+        String password = new String(passwordField.getPassword());
 
         if (email.isEmpty() || password.isEmpty()) {
-
             JOptionPane.showMessageDialog(
                     this,
-                    "Please enter email and password."
+                    "Please enter your login email and password.",
+                    "Input Required",
+                    JOptionPane.WARNING_MESSAGE
             );
-
             return;
         }
 
-        JOptionPane.showMessageDialog(
-                this,
-                "Login successful!"
-        );
+        // Validate Email format if email is entered
+        if (email.contains("@") && !ValidationUtil.isValidEmail(email)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please enter a valid email address format.",
+                    "Validation Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
 
+        // Successful Login Transition
         new DashboardGUI().setVisible(true);
-
         dispose();
     }
 
-
     public static void main(String[] args) {
-
         SwingUtilities.invokeLater(() -> {
-
             new LoginGUI().setVisible(true);
-
         });
     }
 }

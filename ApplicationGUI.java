@@ -263,110 +263,53 @@ public class ApplicationGUI extends JFrame {
     // =====================================================
 
     private void applyForJob() {
-
         try {
+            int studentId = Integer.parseInt(studentIdField.getText().trim());
+            int jobId = Integer.parseInt(jobIdField.getText().trim());
 
-            int applicationId =
-                    Integer.parseInt(
-                            applicationIdField
-                                    .getText()
-                                    .trim()
-                    );
-
-            int studentId =
-                    Integer.parseInt(
-                            studentIdField
-                                    .getText()
-                                    .trim()
-                    );
-
-            int jobId =
-                    Integer.parseInt(
-                            jobIdField
-                                    .getText()
-                                    .trim()
-                    );
-
-
-            Student student =
-                    system.findStudent(studentId);
-
-
-            if (student == null) {
-
-                outputArea.setText(
-                        "Student not found."
-                );
-
+            String checkStatus = system.checkApplicationSubmissionStatus(studentId, jobId);
+            if (!checkStatus.equals("OK")) {
+                outputArea.setText(checkStatus);
                 return;
             }
 
+            int applicationId;
+            String appIdText = applicationIdField.getText().trim();
+            if (appIdText.isEmpty() || appIdText.equals("0")) {
+                applicationId = system.getNextApplicationId();
+            } else {
+                applicationId = Integer.parseInt(appIdText);
+            }
 
-            Job job =
-                    system.findJob(jobId);
-
-
-            if (job == null) {
-
-                outputArea.setText(
-                        "Job not found."
-                );
-
+            if (system.findApplication(applicationId) != null) {
+                outputArea.setText("Application Failed: Application ID #" + applicationId + " already exists. Please use a unique Application ID.");
                 return;
             }
 
+            Student student = system.findStudent(studentId);
+            Job job = system.findJob(jobId);
 
-            // Check eligibility
+            Application application = new Application(applicationId, student, job);
+            boolean added = system.addApplication(application);
 
-            if (!job.isStudentEligible(student)) {
-
+            if (added) {
                 outputArea.setText(
-                        "Student is NOT eligible for this job.\n\n"
-                        + "Minimum CGPA: "
-                        + job.getMinimumCGPA()
-                        + "\nRequired Skill: "
-                        + job.getRequiredSkill()
+                        "APPLICATION SUCCESSFUL!\n\n"
+                        + "Application ID: " + applicationId
+                        + "\nStudent: " + student.getName()
+                        + "\nJob: " + job.getJobTitle()
+                        + "\nCompany: " + (job.getCompany() != null ? job.getCompany().getCompanyName() : "Not specified")
+                        + "\nStatus: Applied"
                 );
-
-                return;
+                applicationIdField.setText(String.valueOf(system.getNextApplicationId()));
+            } else {
+                outputArea.setText("Application Failed: Unexpected internal error while submitting application.");
             }
-
-
-            Application application =
-                    new Application(
-                            applicationId,
-                            student,
-                            job
-                    );
-
-
-            system.addApplication(application);
-
-
-            outputArea.setText(
-                    "APPLICATION SUCCESSFUL!\n\n"
-                    + "Application ID: "
-                    + applicationId
-                    + "\nStudent: "
-                    + student.getName()
-                    + "\nJob: "
-                    + job.getJobTitle()
-                    + "\nCompany: "
-                    + (
-                        job.getCompany() != null
-                        ? job.getCompany().getCompanyName()
-                        : "Not specified"
-                    )
-                    + "\nStatus: Applied"
-            );
-
 
         } catch (NumberFormatException e) {
-
             JOptionPane.showMessageDialog(
                     this,
-                    "Application ID, Student ID and Job ID "
-                    + "must be valid numbers.",
+                    "Student ID and Job ID must be valid integers.",
                     "Input Error",
                     JOptionPane.ERROR_MESSAGE
             );

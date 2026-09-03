@@ -80,6 +80,10 @@ public class Application {
         return interviewer;
     }
 
+    public String getInterviewerName() {
+        return interviewer;
+    }
+
     // Update application status
     public void setStatus(String status) {
 

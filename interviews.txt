@@ -1,0 +1,6 @@
+1001|101|2026-09-10|10:00 AM|Online (Google Meet)|HR Team
+1003|103|2026-09-12|02:00 PM|Online (Zoom)|DataDynamics Manager
+1004|107|2026-09-13|11:30 AM|Offline (Campus)|CloudScale Architect
+1006|110|2026-09-13|03:30 PM|Online (Google Meet)|CloudScale HR Team
+1009|115|2026-09-14|10:00 AM|Offline (Campus)|TechCorp VP Engineering
+1011|101|2026-09-10|10:00 AM|Online (Google Meet)|HR Team

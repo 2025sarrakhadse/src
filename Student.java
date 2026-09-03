@@ -106,16 +106,29 @@ public class Student extends User {
     // Check whether student has a particular skill
     public boolean hasSkill(String requiredSkill) {
 
-        if (skills == null || requiredSkill == null) {
+        if (requiredSkill == null || requiredSkill.trim().isEmpty() ||
+            requiredSkill.trim().equalsIgnoreCase("None") ||
+            requiredSkill.trim().equalsIgnoreCase("Any") ||
+            requiredSkill.trim().equalsIgnoreCase("N/A") ||
+            requiredSkill.trim().equalsIgnoreCase("All")) {
+            return true;
+        }
+
+        if (skills == null || skills.length == 0) {
             return false;
         }
 
+        String reqClean = requiredSkill.trim().toLowerCase();
+
         for (String skill : skills) {
 
-            if (skill != null &&
-                skill.equalsIgnoreCase(requiredSkill.trim())) {
-
-                return true;
+            if (skill != null && !skill.trim().isEmpty()) {
+                String sClean = skill.trim().toLowerCase();
+                if (sClean.equalsIgnoreCase(reqClean) ||
+                    sClean.contains(reqClean) ||
+                    reqClean.contains(sClean)) {
+                    return true;
+                }
             }
         }
 
@@ -123,10 +136,8 @@ public class Student extends User {
     }
 
     // Check whether student is eligible for a job
-    public boolean isEligible(double minimumCGPA,
-                              String requiredSkill) {
-
-        return cgpa >= minimumCGPA
-                && hasSkill(requiredSkill);
+    public boolean isEligible(double minimumCGPA, String requiredSkill) {
+        double studentCgpa = getCgpa();
+        return studentCgpa >= minimumCGPA && hasSkill(requiredSkill);
     }
 }

@@ -48,154 +48,135 @@ public class PlacementSystem {
     public PlacementSystem() {
 
         studentMap = new StudentHashMap();
-
         companies = new ArrayList<>();
+        applicationList = new ApplicationLinkedList();
+        interviewQueue = new InterviewQueue();
+        actionStack = new ActionStack();
 
-        applicationList =
-                new ApplicationLinkedList();
-
-        interviewQueue =
-                new InterviewQueue();
-
-        actionStack =
-                new ActionStack();
-
-        // Load previously saved students from file
-        loadStudentsFromFile();
+        // Multi-entity loading from text files on startup
+        loadAllData();
     }
 
+
+    // =====================================================
+    // FILE MANAGEMENT
+    // =====================================================
+
+    public void loadAllData() {
+        // 1. Load Students
+        Student[] savedStudents = FileManager.loadStudents();
+        if (savedStudents != null) {
+            for (Student s : savedStudents) {
+                if (s != null && !studentMap.containsStudent(s.getUserId())) {
+                    studentMap.addStudent(s);
+                }
+            }
+        }
+
+        // 2. Load Companies
+        Company[] savedCompanies = FileManager.loadCompanies();
+        if (savedCompanies != null) {
+            for (Company c : savedCompanies) {
+                if (c != null && findCompany(c.getCompanyId()) == null) {
+                    companies.add(c);
+                }
+            }
+        }
+
+        // 3. Load Jobs
+        Job[] savedJobs = FileManager.loadJobs(this);
+        if (savedJobs != null) {
+            for (Job j : savedJobs) {
+                if (j != null && j.getCompany() != null) {
+                    if (j.getCompany().findJob(j.getJobId()) == null) {
+                        j.getCompany().addJob(j);
+                    }
+                }
+            }
+        }
+
+        // 4. Load Applications
+        Application[] savedApps = FileManager.loadApplications(this);
+        if (savedApps != null) {
+            for (Application a : savedApps) {
+                if (a != null && findApplication(a.getApplicationId()) == null) {
+                    applicationList.addApplication(a);
+                    if (a.getApplicationId() >= nextApplicationId) {
+                        nextApplicationId = a.getApplicationId() + 1;
+                    }
+                }
+            }
+        }
+
+        // 5. Load Interviews
+        FileManager.loadInterviews(this);
+
+        // Seed initial data if empty
+        if (getTotalStudents() == 0 || getTotalCompanies() == 0) {
+            DataInitializer.initializeSeedData(this);
+        }
+    }
+
+    public void saveStudentsToFile() {
+        FileManager.saveStudents(studentMap.getAllStudents());
+    }
+
+    public void saveCompaniesToFile() {
+        FileManager.saveCompanies(getAllCompanies());
+    }
+
+    public void saveJobsToFile() {
+        FileManager.saveJobs(getAllJobs());
+    }
+
+    public void saveApplicationsToFile() {
+        FileManager.saveApplications(getAllApplications());
+    }
+
+    public void saveInterviewsToFile() {
+        FileManager.saveInterviews(getAllApplications());
+    }
 
     // =====================================================
     // STUDENT MANAGEMENT
     // =====================================================
 
-    // Register student
     public boolean registerStudent(Student student) {
-
-    if (student == null) {
-        return false;
+        if (student == null) return false;
+        boolean added = studentMap.addStudent(student);
+        if (added) {
+            actionStack.push("Student registered: " + student.getName());
+            saveStudentsToFile();
+        }
+        return added;
     }
 
-    boolean added =
-            studentMap.addStudent(student);
-
-    if (added) {
-
-        // Record action
-        actionStack.push(
-                "Student registered: "
-                + student.getName()
-        );
-
-        // Save updated student list to file
-        saveStudentsToFile();
-    }
-
-    return added;
-    }
-
-
-    // Add student - compatibility method
     public void addStudent(Student student) {
-
         registerStudent(student);
     }
 
-
-    // Find student
     public Student findStudent(int studentId) {
-
         return studentMap.searchStudent(studentId);
     }
 
-
-    // Search student
     public Student searchStudent(int studentId) {
-
         return findStudent(studentId);
     }
 
-
-    // Delete student
     public boolean deleteStudent(int studentId) {
-
-        Student student =
-                findStudent(studentId);
-
-        if (student == null) {
-            return false;
-        }
-
-        boolean deleted =
-                studentMap.deleteStudent(studentId);
-
+        Student student = findStudent(studentId);
+        if (student == null) return false;
+        boolean deleted = studentMap.deleteStudent(studentId);
         if (deleted) {
-
-    actionStack.push(
-            "Student deleted: "
-            + student.getName()
-    );
-
-    // Save updated student list to file
-    saveStudentsToFile();
-}
-
+            actionStack.push("Student deleted: " + student.getName());
+            saveStudentsToFile();
+        }
         return deleted;
     }
 
-
-    // Get all students
     public Student[] getAllStudents() {
-
         return studentMap.getAllStudents();
     }
-
-    // =====================================================
-// FILE MANAGEMENT
-// =====================================================
-
-// Load students from students.txt
-private void loadStudentsFromFile() {
-
-    Student[] savedStudents =
-            FileManager.loadStudents();
-
-    if (savedStudents == null ||
-        savedStudents.length == 0) {
-
-        return;
-    }
-
-    int loadedCount = 0;
-
-    for (Student student : savedStudents) {
-
-        if (student != null) {
-
-            boolean added =
-                    studentMap.addStudent(student);
-
-            if (added) {
-                loadedCount++;
-            }
-        }
-    }
-
-    System.out.println(
-            loadedCount +
-            " student(s) loaded into the system."
-    );
-}
-
-
-// Save all current students to students.txt
-public void saveStudentsToFile() {
-
-    Student[] students =
-            studentMap.getAllStudents();
-
-    FileManager.saveStudents(students);
-}
 
     // Total students
     public int getTotalStudents() {
@@ -234,6 +215,26 @@ public void saveStudentsToFile() {
         );
     }
 
+    // Students sorted by Name
+    public Student[] getStudentsSortedByName() {
+        Student[] students = getAllStudents();
+        StudentSorting.sortByName(students);
+        return students;
+    }
+
+    // Count placed/selected students
+    public int getPlacedStudentsCount() {
+        int count = 0;
+        for (Application app : getAllApplications()) {
+            if (app != null && app.getStatus() != null &&
+                (app.getStatus().equalsIgnoreCase("Selected") || app.getStatus().equalsIgnoreCase("Placed"))) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
 
     // =====================================================
     // COMPANY MANAGEMENT
@@ -259,6 +260,8 @@ public void saveStudentsToFile() {
                 "Company added: "
                 + company.getCompanyName()
         );
+
+        saveCompaniesToFile();
 
         return true;
     }
@@ -350,6 +353,8 @@ public void saveStudentsToFile() {
                 + company.getCompanyName()
         );
 
+        saveCompaniesToFile();
+
         return true;
     }
 
@@ -376,6 +381,8 @@ public void saveStudentsToFile() {
                 "Job added: "
                 + job.getJobTitle()
         );
+
+        saveJobsToFile();
 
         return true;
     }
@@ -500,6 +507,8 @@ public void saveStudentsToFile() {
                         + job.getJobTitle()
                 );
 
+                saveJobsToFile();
+
                 return true;
             }
         }
@@ -512,57 +521,48 @@ public void saveStudentsToFile() {
     // APPLICATION MANAGEMENT
     // =====================================================
 
+    public int getNextApplicationId() {
+        return nextApplicationId;
+    }
+
+    // Check application submission diagnostic status
+    public String checkApplicationSubmissionStatus(int studentId, int jobId) {
+        Student student = findStudent(studentId);
+        if (student == null) {
+            return "Application Failed: Student ID #" + studentId + " not found.";
+        }
+
+        Job job = findJob(jobId);
+        if (job == null) {
+            return "Application Failed: Job ID #" + jobId + " not found.";
+        }
+
+        if (!job.isStudentEligible(student)) {
+            return "Application Failed: " + job.getEligibilityReason(student);
+        }
+
+        if (hasApplied(studentId, jobId)) {
+            String studentName = student.getName();
+            String jobTitle = job.getJobTitle();
+            return String.format("Application Failed: Student #%d (%s) has already applied for Job #%d (%s).", studentId, studentName, jobId, jobTitle);
+        }
+
+        return "OK";
+    }
+
     // Student applies for job
     public Application applyForJob(
             int studentId,
             int jobId) {
 
-        Student student =
-                findStudent(studentId);
-
-        if (student == null) {
-
-            System.out.println(
-                    "Student not found."
-            );
-
+        String checkStatus = checkApplicationSubmissionStatus(studentId, jobId);
+        if (!checkStatus.equals("OK")) {
+            System.out.println(checkStatus);
             return null;
         }
 
-        Job job =
-                findJob(jobId);
-
-        if (job == null) {
-
-            System.out.println(
-                    "Job not found."
-            );
-
-            return null;
-        }
-
-
-        // Check eligibility
-        if (!job.isStudentEligible(student)) {
-
-            System.out.println(
-                    "Student is not eligible for this job."
-            );
-
-            return null;
-        }
-
-
-        // Prevent duplicate application
-        if (hasApplied(studentId, jobId)) {
-
-            System.out.println(
-                    "Student has already applied."
-            );
-
-            return null;
-        }
-
+        Student student = findStudent(studentId);
+        Job job = findJob(jobId);
 
         Application application =
                 new Application(
@@ -583,6 +583,7 @@ public void saveStudentsToFile() {
                 + job.getJobTitle()
         );
 
+        saveApplicationsToFile();
 
         return application;
     }
@@ -607,10 +608,16 @@ public void saveStudentsToFile() {
                 application
         );
 
+        if (application.getApplicationId() >= nextApplicationId) {
+            nextApplicationId = application.getApplicationId() + 1;
+        }
+
         actionStack.push(
                 "Application added: "
                 + application.getApplicationId()
         );
+
+        saveApplicationsToFile();
 
         return true;
     }
@@ -776,6 +783,9 @@ public void saveStudentsToFile() {
                     "Application deleted: "
                     + applicationId
             );
+
+            saveApplicationsToFile();
+            saveInterviewsToFile();
         }
 
         return deleted;
@@ -822,6 +832,8 @@ public void saveStudentsToFile() {
                 + " status changed to "
                 + status
         );
+
+        saveApplicationsToFile();
 
         return true;
     }
@@ -880,6 +892,8 @@ public void saveStudentsToFile() {
                 + " added to interview queue"
         );
 
+        saveInterviewsToFile();
+
         return true;
     }
 
@@ -912,6 +926,9 @@ public void saveStudentsToFile() {
                     .getStudent()
                     .getName()
             );
+
+            saveInterviewsToFile();
+            saveApplicationsToFile();
         }
 
         return application;
@@ -980,6 +997,9 @@ public void saveStudentsToFile() {
                     .getStudent()
                     .getName()
             );
+
+            saveInterviewsToFile();
+            saveApplicationsToFile();
         }
 
         return scheduled;
@@ -1005,6 +1025,9 @@ public void saveStudentsToFile() {
                 .getStudent()
                 .getName()
         );
+
+        saveInterviewsToFile();
+        saveApplicationsToFile();
 
         return true;
     }
