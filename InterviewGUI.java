@@ -383,29 +383,51 @@ public class InterviewGUI extends JFrame {
 
             if (scheduled) {
 
-                outputArea.setText(
-                        "INTERVIEW SCHEDULED SUCCESSFULLY!\n\n"
-                        + "Application ID: "
-                        + applicationId
-                        + "\nStudent: "
-                        + application
-                                .getStudent()
-                                .getName()
-                        + "\nJob: "
-                        + application
-                                .getJob()
-                                .getJobTitle()
-                        + "\nDate: "
-                        + date
-                        + "\nTime: "
-                        + time
-                        + "\nMode: "
-                        + mode
-                        + "\nInterviewer: "
-                        + interviewer
-                );
+    // Add the scheduled interview to the Queue
+                boolean addedToQueue =
+                 system.addToInterviewQueue(applicationId);
 
-            } else {
+                if (addedToQueue) {
+
+        outputArea.setText(
+                "INTERVIEW SCHEDULED SUCCESSFULLY!\n\n"
+                + "Application ID: "
+                + applicationId
+                + "\nStudent: "
+                + application
+                        .getStudent()
+                        .getName()
+                + "\nJob: "
+                + application
+                        .getJob()
+                        .getJobTitle()
+                + "\nDate: "
+                + date
+                + "\nTime: "
+                + time
+                + "\nMode: "
+                + mode
+                + "\nInterviewer: "
+                + interviewer
+                + "\n\nAdded to Interview Queue."
+        );
+
+    } else {
+
+        outputArea.setText(
+                "Interview scheduled, but could not "
+                + "be added to the interview queue."
+        );
+    }
+
+} else {
+
+    outputArea.setText(
+            "Unable to schedule interview.\n"
+            + "Please check all details."
+    );
+
+                }else {
 
                 outputArea.setText(
                         "Unable to schedule interview.\n"

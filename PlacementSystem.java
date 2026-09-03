@@ -59,6 +59,9 @@ public class PlacementSystem {
 
         actionStack =
                 new ActionStack();
+
+        // Load previously saved students from file
+        loadStudentsFromFile();
     }
 
 
@@ -69,22 +72,26 @@ public class PlacementSystem {
     // Register student
     public boolean registerStudent(Student student) {
 
-        if (student == null) {
-            return false;
-        }
+    if (student == null) {
+        return false;
+    }
 
-        boolean added =
-                studentMap.addStudent(student);
+    boolean added =
+            studentMap.addStudent(student);
 
-        if (added) {
+    if (added) {
 
-            actionStack.push(
-                    "Student registered: "
-                    + student.getName()
-            );
-        }
+        // Record action
+        actionStack.push(
+                "Student registered: "
+                + student.getName()
+        );
 
-        return added;
+        // Save updated student list to file
+        saveStudentsToFile();
+    }
+
+    return added;
     }
 
 
@@ -124,11 +131,14 @@ public class PlacementSystem {
 
         if (deleted) {
 
-            actionStack.push(
-                    "Student deleted: "
-                    + student.getName()
-            );
-        }
+    actionStack.push(
+            "Student deleted: "
+            + student.getName()
+    );
+
+    // Save updated student list to file
+    saveStudentsToFile();
+}
 
         return deleted;
     }
@@ -140,6 +150,52 @@ public class PlacementSystem {
         return studentMap.getAllStudents();
     }
 
+    // =====================================================
+// FILE MANAGEMENT
+// =====================================================
+
+// Load students from students.txt
+private void loadStudentsFromFile() {
+
+    Student[] savedStudents =
+            FileManager.loadStudents();
+
+    if (savedStudents == null ||
+        savedStudents.length == 0) {
+
+        return;
+    }
+
+    int loadedCount = 0;
+
+    for (Student student : savedStudents) {
+
+        if (student != null) {
+
+            boolean added =
+                    studentMap.addStudent(student);
+
+            if (added) {
+                loadedCount++;
+            }
+        }
+    }
+
+    System.out.println(
+            loadedCount +
+            " student(s) loaded into the system."
+    );
+}
+
+
+// Save all current students to students.txt
+public void saveStudentsToFile() {
+
+    Student[] students =
+            studentMap.getAllStudents();
+
+    FileManager.saveStudents(students);
+}
 
     // Total students
     public int getTotalStudents() {
